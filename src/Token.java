@@ -26,4 +26,11 @@ public class Token {
     public int getLigne() {
         return ligne;
     }
+
+    @Override
+    public String toString() {
+        return "Type = " + getType() + "\n" +
+                "Valeur = " + Integer.toString(getValeur()) + "\n" +
+                "Ligne = " + Integer.toString(getLigne());
+    }
 }
