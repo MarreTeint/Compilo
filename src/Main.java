@@ -6,12 +6,9 @@ public class Main {
     Token current = new Token(null,null,null);
     Token last = new Token(null,null,null);
     static void next(String File){
-        String fileName = args[0];
-        ArrayList<Token> listTokens = new ArrayList<Token>();
 
-        try{
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("src/"+fileName), "ASCII"));
+
 
             //Initialisation variables
             String line;
@@ -19,7 +16,7 @@ public class Main {
             boolean isAWord = false;
             String word = "";
 
-            while ((line = br.readLine()) != null) {
+
                 lineIndex++;
                 for (int i = 0; i < line.length(); i++) {
                     char lettre = line.charAt(i);
@@ -76,6 +73,8 @@ public class Main {
                             word = word + lettre; //Concaténation du potentiel mot
                             isAWord = true; //On cherche à compléter un mot
                             break;
+                        default:
+                            listTokens.add(new Token("EOS", 0, lineIndex));
 
                     }
                 }
@@ -86,9 +85,7 @@ public class Main {
 
             br.close();
 
-        } catch (IOException e) {
-            e.printStackTrace();
-        }
+
     }
 
     public boolean check(type){
@@ -109,10 +106,18 @@ public class Main {
     }
     public static void main(String[] args){
 
-        //Le projet bien franglais, bien trop relou trop relou
+        String fileName = args[0];
+        String inside = "";
+        try{
 
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("src/"+fileName), "ASCII"));} catch (IOException e) {
+            e.printStackTrace();
+        }
+        while ((line = br.readLine()) != null) {
+            inside += line;
+        }
 
-
+        system.out.println(inside);
 
 
         //Print results
