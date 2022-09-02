@@ -3,8 +3,12 @@ import java.util.ArrayList;
 
 public class Main {
 
+    //Initialisation global
+    static ArrayList<String> memory = new ArrayList<String>();
     Token current = new Token(null,null,null);
     Token last = new Token(null,null,null);
+
+
     static void next(String File){
         String fileName = args[0];
         ArrayList<Token> listTokens = new ArrayList<Token>();
@@ -26,13 +30,13 @@ public class Main {
                     switch (lettre) {
                         case ' ': //Space or end of a word
                             if(isAWord) {
-
                                 if(word.equals("return")) //TODO Check if that's actually how it's supposed to be done lmao
                                     listTokens.add(new Token("return", 0, lineIndex));
                                 else if (word.equals("int"))
                                     listTokens.add(new Token("int", 0, lineIndex));
                                 else
-                                    listTokens.add(new Token("mot", 0, lineIndex)); //TODO Change valeur for the actual "word" variable ?
+                                    memory.add(word);
+                                    listTokens.add(new Token("ident", (memory.size()-1), lineIndex)); //The word value is stored in memory at index size-1
 
                                 isAWord = false; //Le mot est terminé
                                 word = "";
