@@ -30,7 +30,7 @@ public class Main {
                     switch (lettre) {
                         case ' ': //Space or end of a word
                             if(isAWord) {
-                                if(word.equals("return")) //TODO Check if that's actually how it's supposed to be done lmao
+                                if(word.equals("return"))
                                     listTokens.add(new Token("return", 0, lineIndex));
                                 else if (word.equals("int"))
                                     listTokens.add(new Token("int", 0, lineIndex));
@@ -80,6 +80,14 @@ public class Main {
                             word = word + lettre; //Concaténation du potentiel mot
                             isAWord = true; //On cherche à compléter un mot
                             break;
+                        case '0': case '1': case '2': case '3': case '4': case '5': case '6': case '7': case '8': case '9':
+                            if(isAWord) {
+                                word = word + lettre; //Concaténation du potentiel mot
+                                isAWord = true; //On cherche à compléter un mot
+                            }
+                            else {
+                                listTokens.add(new Token("number", Integer.parseInt(lettre + ""), lineIndex)); //On ajoute un nombre
+                            }
 
                     }
                 }
@@ -92,6 +100,12 @@ public class Main {
 
         } catch (IOException e) {
             e.printStackTrace();
+        }
+
+        //Function that add word to memory and create a token
+        void addWord(String word) {
+            memory.add(word);
+            listTokens.add(new Token("ident", (memory.size()-1), lineIndex)); //The word value is stored in memory at index size-1
         }
     }
 
