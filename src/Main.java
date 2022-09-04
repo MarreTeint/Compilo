@@ -16,6 +16,8 @@ public class Main {
         int lineIndex = 0;
         boolean isAWord = false;
         String word = "";
+        boolean isANumber = false;
+        String number = "";
 
 
         lineIndex++;
@@ -24,22 +26,30 @@ public class Main {
         switch (lettre) {
             case ' ': //Space or end of a word
                 if (isAWord) {
-
-                    if (word.equals("return")) { //TODO Check if that's actually how it's supposed to be done lmao
+                    isAWord = false; //Le mot est terminé
+                    if (word.equals("return")) {
                         last = current;
-                        current = new Token("return", 0, lineIndex);
+                        current = new Token("return", 0, lineIndex); //TODO : Ajouter le tableau de valeurs pour les valeurs des mots
+                        word = "";
                         return current;
                     } else if (word.equals("int")) {
                         last = current;
                         current = new Token("int", 0, lineIndex);
+                        word = "";
                         return current;
                     } else {
                         last = current;
-                        current = new Token("mot", 0, lineIndex); //TODO Change valeur for the actual "word" variable ?
+                        current = new Token("mot", 0, lineIndex);
+                        word = "";
                         return current;
                     }
-                    //isAWord = false; //Le mot est terminé
-                    //word = "";
+                }
+                if (isANumber) {
+                    isANumber = false; //Le mot est termin"
+                        last = current;
+                        current = new Token("number", 0, lineIndex);
+                        number = "";
+                        //return current; //TODO Quoi ?? Pourquoi on return un truc dans le main ?
                 }
                 break;
             case '(': //Opened bracket
@@ -84,7 +94,7 @@ public class Main {
             case 'd':
             case 'e':
             case 'f':
-            case 'g': //Lower case leters
+            case 'g':
             case 'h':
             case 'i':
             case 'j':
@@ -110,7 +120,7 @@ public class Main {
             case 'D':
             case 'E':
             case 'F':
-            case 'G': //Upper case letters
+            case 'G':
             case 'H':
             case 'I':
             case 'J':
@@ -130,18 +140,53 @@ public class Main {
             case 'X':
             case 'Y':
             case 'Z':
+                if (isANumber) {
+                    isANumber = false; //Le mot est termin"
+                    last = current;
+                    current = new Token("number", 0, lineIndex);
+                    number = "";
+                    //return current;
+                }
                 word = word + lettre; //Concaténation du potentiel mot
                 isAWord = true; //On cherche à compléter un mot
                 break;
-
-
+            case '1':
+            case '2':
+            case '3':
+            case '4':
+            case '5':
+            case '6':
+            case '7':
+            case '8':
+            case '9':
+                if(isAWord) {
+                    isAWord = false;
+                    if (word.equals("return")) {
+                        last = current;
+                        current = new Token("return", 0, lineIndex);
+                        word = "";
+                        return current;
+                    } else if (word.equals("int")) {
+                        last = current;
+                        current = new Token("int", 0, lineIndex);
+                        word = "";
+                        return current;
+                    } else {
+                        last = current;
+                        current = new Token("mot", 0, lineIndex);
+                        word = "";
+                        return current;
+                    }
+                }
+                number = number + lettre; //Concaténation du potentiel nombre
+                isANumber = true;
+                break;
         }
         last = current;
         current = new Token("EOS", 0, lineIndex);
         return current;
 
     }
-
 
     public boolean check(String type) {
         if (current.type == type) {
