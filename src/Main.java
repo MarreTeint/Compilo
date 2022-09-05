@@ -114,7 +114,7 @@ public class Main {
     public boolean check(String type) {
         if (current.type == type) {
             last = current;
-            current = next();
+            next();
             return true;
         }
         return false;
