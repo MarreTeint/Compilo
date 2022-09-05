@@ -9,7 +9,7 @@ public class Main {
     static String inside = "";
     int i = 0;
 
-    Token next() {
+    public Token next() {
 
 
         //Initialisation variables
@@ -50,7 +50,7 @@ public class Main {
                         last = current;
                         current = new Token("number", 0, lineIndex);
                         number = "";
-                        //return current; //TODO Quoi ?? Pourquoi on return un truc dans le main ?
+                        //return current;
                 }
                 break;
             case '(': //Opened bracket
