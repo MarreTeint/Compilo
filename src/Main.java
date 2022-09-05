@@ -1,4 +1,5 @@
 import java.io.*;
+
 import java.util.ArrayList;
 
 public class Main {
@@ -64,7 +65,7 @@ public class Main {
             case '/': //Divide
                 last = current;
                 current = new Token("divide", 0, lineIndex);
-            case 'a': case 'b': case 'c': case 'd': case 'e': case 'f':
+            /*case 'a': case 'b': case 'c': case 'd': case 'e': case 'f':
             case 'g': case 'h': case 'i': case 'j': case 'k': case 'l':
             case 'm': case 'n': case 'o': case 'p': case 'q': case 'r':
             case 's': case 't': case 'u': case 'v': case 'w': case 'x':
@@ -91,7 +92,7 @@ public class Main {
                 }
                 number = number + lettre; //Concaténation du potentiel nombre
                 isANumber = true;
-                break;
+                break;*/
         }
         last = current;
         current = new Token("EOS", 0, lineIndex);
@@ -131,18 +132,17 @@ public class Main {
         String fileName = args[0];
         try {
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("src/" + fileName), "ASCII"));
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "ASCII"));//jsp prk plus besoin du src/
             String line;
             while ((line = br.readLine()) != null) {
                 inside += line;
             }
         } catch (IOException e) {
-        } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Erreur de lecture du fichier");
         }
 
 
-        System.out.println(inside);
 
+        System.out.println(inside);
     }
 }
