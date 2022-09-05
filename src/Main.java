@@ -1,13 +1,16 @@
 import java.io.*;
 
 import java.util.ArrayList;
+import java.util.HashMap;
 
 public class Main {
 
     Token current = new Token(null, 0, 0);
     Token last = new Token(null, 0, 0);
-
-    static String inside = "";
+    //Key = operator, [0] = precedence, [1] = associativity
+    HashMap<String, int[]> symboles = new HashMap<String, int[]>();
+    initSymboles();
+    String inside = "";
     int i = 0;
 
     public void next() {
@@ -98,6 +101,24 @@ public class Main {
         last = current;
         current = new Token("EOS", 0, lineIndex);
     }
+
+    public void initSymboles() {
+        symboles.put("=", new int[]{1, 0});
+        symboles.put("==", new int[]{2, 1});
+        symboles.put("!=", new int[]{2, 1});
+        symboles.put("<", new int[]{2, 1});
+        symboles.put(">", new int[]{2, 1});
+        symboles.put("<=", new int[]{2, 1});
+        symboles.put(">=", new int[]{2, 1});
+        symboles.put("+", new int[]{3, 1});
+        symboles.put("-", new int[]{3, 1});
+        symboles.put("*", new int[]{4, 1});
+        symboles.put("/", new int[]{4, 1});
+        symboles.put("(", new int[]{5, 1});
+        symboles.put(")", new int[]{5, 1});
+    }
+
+
 
     public void processWord(String word, int lineIndex) {
         if (word.equals("return")) {
