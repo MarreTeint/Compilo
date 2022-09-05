@@ -6,6 +6,7 @@ public class Main {
 
     Token current = new Token(null, 0, 0);
     Token last = new Token(null, 0, 0);
+
     static String inside = "";
     int i = 0;
 
@@ -82,7 +83,7 @@ public class Main {
                 }
                 word = word + lettre; //Concaténation du potentiel mot
                 isAWord = true; //On cherche à compléter un mot
-                break;
+                break;*/
             case '1': case '2': case '3': case '4': case '5': case '6':
             case '7': case '8': case '9':
                 if(isAWord) {
@@ -92,7 +93,7 @@ public class Main {
                 }
                 number = number + lettre; //Concaténation du potentiel nombre
                 isANumber = true;
-                break;*/
+                break;
         }
         last = current;
         current = new Token("EOS", 0, lineIndex);
@@ -140,8 +141,6 @@ public class Main {
         } catch (IOException e) {
             System.out.println("Erreur de lecture du fichier");
         }
-
-
 
         System.out.println(inside);
     }
