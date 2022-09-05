@@ -11,8 +11,7 @@ public class Main {
     int i = 0;
 
     public void next() {
-
-
+        last = current;
         //Initialisation variables
         String line;
         int lineIndex = 0;
@@ -95,7 +94,7 @@ public class Main {
                 isANumber = true;
                 break;
         }
-        last = current;
+
         current = new Token("EOS", 0, lineIndex);
     }
 
@@ -110,6 +109,10 @@ public class Main {
             last = current;
             current = new Token("mot", 0, lineIndex);
         }
+        last = current;
+        current = new Token("EOS", 0, lineIndex);
+
+
     }
 
     public boolean check(String type) {
@@ -128,6 +131,86 @@ public class Main {
         return false;
     }
 
+    //Analyse syntaxique
+
+    public Node Syntaxe(){
+        if(current.type != "EOS"){
+            //throw an error
+        }
+        return null;
+    }
+
+    Node Global(){
+        return  Function();
+    }
+    Node Function(){
+        return Instruction();
+    }
+    Node Instruction(){
+        return Expression();
+    }
+    //TODO faire ca
+    Node Expression(){
+        return Prefix();
+    }
+    Node Prefix(){
+        if(check("moins")){
+            Node N = Prefix();
+            Node M = new Node("moins", 0);
+            M.addSon(N);
+            return M;
+        }
+        else if(check("plus")){
+            Node N = Prefix();
+            Node M = new Node("plus", 0);
+            M.addSon(N);
+            return M;
+        }
+        else if (check("multiply")){
+            Node N = Prefix();
+            Node M = new Node("multiply", 0);
+            M.addSon(N);
+            return M;
+        }
+        else if (check("divide")){
+            Node N = Prefix();
+            Node M = new Node("divide", 0);
+            M.addSon(N);
+            return M;
+        }
+        else if (check("negation")){
+            Node N = Prefix();
+            Node M = new Node("negation", 0);
+            M.addSon(N);
+            return M;
+        }
+        else{
+            return Suffix();
+        }
+    }
+    Node Suffix(){
+        return Atome();
+    }
+    Node Atome(){
+        if(check("number")){
+            return new Node("number", current.getValeur());
+        }
+        else if(check("parOpen")) {
+            //check if next is an expression
+            Node N = Expression();
+            if (!check("parClose")) {
+                //throw an error
+            }
+            return N;
+        }
+        else{
+            //throw an error
+        }
+    }
+
+    //Analyse sémantique
+
+    //Génration de code
     public static void main(String[] args) {
 
         String fileName = args[0];
