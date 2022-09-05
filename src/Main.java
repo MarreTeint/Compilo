@@ -1,4 +1,5 @@
 import java.io.*;
+
 import java.util.ArrayList;
 
 public class Main {
@@ -88,7 +89,7 @@ public class Main {
                 last = current;
                 current = new Token("divide", 0, lineIndex);
                 return current;
-            case 'a':
+            /*case 'a':
             case 'b':
             case 'c':
             case 'd':
@@ -149,7 +150,7 @@ public class Main {
                 }
                 word = word + lettre; //Concaténation du potentiel mot
                 isAWord = true; //On cherche à compléter un mot
-                break;
+                break;*/
             case '1':
             case '2':
             case '3':
@@ -158,7 +159,7 @@ public class Main {
             case '6':
             case '7':
             case '8':
-            case '9':
+            case '9': //TODO token CONSTANTE
                 if(isAWord) {
                     isAWord = false;
                     if (word.equals("return")) {
@@ -209,18 +210,17 @@ public class Main {
         String fileName = args[0];
         try {
 
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream("src/" + fileName), "ASCII"));
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "ASCII"));//jsp prk plus besoin du src/
             String line;
             while ((line = br.readLine()) != null) {
                 inside += line;
             }
         } catch (IOException e) {
-        } catch (Exception e) {
-            e.printStackTrace();
+            System.out.println("Erreur de lecture du fichier");
         }
 
 
-        System.out.println(inside);
 
+        System.out.println(inside);
     }
 }
