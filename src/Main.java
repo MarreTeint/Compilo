@@ -133,11 +133,12 @@ public class Main {
 
     //Analyse syntaxique
 
-    public Node Syntaxe(){
-        if(current.type != "EOS"){
-            //throw an error
+    public Node Syntaxe() throws errSyntaxique {
+        if(check("EOS")){
+            return null;
         }
-        return null;
+        Node N = Global();
+        return N;
     }
 
     Node Global() throws errSyntaxique {
@@ -269,14 +270,14 @@ public class Main {
 
         String fileName = args[0];
         try {
-
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "ASCII"));//jsp prk plus besoin du src/
             String line;
             while ((line = br.readLine()) != null) {
                 inside += line;
+                inside+='\n';
             }
         } catch (IOException e) {
-            System.out.println("Erreur de lecture du fichier");
+            System.out.println("Erreur : Fichier introuvable");
         }
 
         System.out.println(inside);

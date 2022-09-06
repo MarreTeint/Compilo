@@ -13,6 +13,10 @@ public class Node {
         this.value = value;
         this.sons = sons;
     }
+
+    public Node(){
+
+    }
     public void print() {
         System.out.println("Type: " + type + " Value: " + value);
     }
