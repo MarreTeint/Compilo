@@ -28,6 +28,7 @@ public class Main {
         char lettre = inside.charAt(i);
         i++;
         switch (lettre) {
+            case '\n':
             case ' ': //Space or end of a word
                 last = current;
                 current = new Token("espace", 0, lineIndex);
@@ -82,7 +83,12 @@ public class Main {
                     word = word + inside.charAt(i);
                     i++;
                 }
-                processWord(word, lineIndex);
+                try {
+                    processWord(word, lineIndex);
+                }
+                catch (errLexical e) {
+                    System.out.println(e.getMessage());
+                }
                 word = "";
                 break;
             case '1': case '2': case '3': case '4': case '5': case '6':
@@ -117,7 +123,7 @@ public class Main {
         symboles.put(")",   new int[]{5, 1});
     }
 
-    public static void processWord(String word, int lineIndex) {
+    public static void processWord(String word, int lineIndex) throws errLexical {
         if (word.equals("return")) {
             last = current;
             current = new Token("return", 0, lineIndex);
@@ -127,10 +133,12 @@ public class Main {
         } else if (word.equals("if")) {
             last = current;
             current = new Token("if", 0, lineIndex);
-        }/*else {
+        }
+        /*else {
             last = current;
             current = new Token("mot", 0, lineIndex);
         }*/
+        throw new errLexical("Unknown word", lineIndex);
     }
 
     public static boolean check(String type) {
@@ -151,21 +159,23 @@ public class Main {
 
     //Analyse syntaxique
 
-    public Node Syntaxe() throws errSyntaxique {
+    public static Node Syntaxe() throws errSyntaxique {
+        next();
         if(check("EOS")){
             return null;
         }
+        System.out.println(current.toString());
         Node N = Global();
         return N;
     }
 
-    Node Global() throws errSyntaxique {
+    static Node Global() throws errSyntaxique {
         return  Function();
     }
-    Node Function() throws errSyntaxique {
+    static Node Function() throws errSyntaxique {
         return Instruction();
     }
-    Node Instruction() throws errSyntaxique {
+    static Node Instruction() throws errSyntaxique {
         if(check("if")){
             accept("parOpen");
             Node texte = Expression();
@@ -194,7 +204,7 @@ public class Main {
         return N;
     }
     //TODO faire ca
-    Node Expression() throws errSyntaxique {
+    static Node Expression() throws errSyntaxique {
         Node N = Prefix();
         if(check("plus")){
             Node n = new Node("add", 0);
@@ -224,7 +234,7 @@ public class Main {
             return N;
         }
     }
-    Node Prefix() throws errSyntaxique {
+    static Node Prefix() throws errSyntaxique {
         if(check("moins")){
             Node N = Prefix();
             Node M = new Node("moins", 0);
@@ -259,10 +269,10 @@ public class Main {
             return Suffix();
         }
     }
-    Node Suffix() throws errSyntaxique {
+    static Node Suffix() throws errSyntaxique {
         return Atome();
     }
-    Node Atome() throws errSyntaxique {
+    static Node Atome() throws errSyntaxique {
         if(check("number")){
             return new Node("number", current.getValeur());
         }
@@ -298,7 +308,11 @@ public class Main {
         } catch (IOException e) {
             System.out.println("Erreur : Fichier introuvable");
         }
-
+        try {
+            Syntaxe();
+        } catch (errSyntaxique errSyntaxique) {
+            System.out.println("Erreur Syntaxique : " + errSyntaxique.getMessage());
+        }
         System.out.println(inside);
     }
 }
