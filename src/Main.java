@@ -140,20 +140,72 @@ public class Main {
         return null;
     }
 
-    Node Global(){
+    Node Global() throws errSyntaxique {
         return  Function();
     }
-    Node Function(){
+    Node Function() throws errSyntaxique {
         return Instruction();
     }
-    Node Instruction(){
-        return Expression();
+    Node Instruction() throws errSyntaxique {
+        if(check("if")){
+            accept("parOpen");
+            Node texte = Expression();
+            accept("parClose");
+            Node then = Instruction();
+            if(check("else")){
+                Node elsee = Instruction();
+                Node n = new Node("if", 0);
+                n.addSon(texte);
+                n.addSon(then);
+                n.addSon(elsee);
+                return n;
+            }
+        }
+        else if(check("accoladeopen")){
+            Node n = new Node("block", 0);
+            while(!check("accoladeclose")){
+                n.addSon(Instruction());
+            }
+            return n;
+        }
+        Node n = Expression();
+        accept("pointVirgule");
+        Node N = new Node("drop", 0);
+        N.addSon(n);
+        return N;
     }
     //TODO faire ca
-    Node Expression(){
-        return Prefix();
+    Node Expression() throws errSyntaxique {
+        Node N = Prefix();
+        if(check("plus")){
+            Node n = new Node("add", 0);
+            n.addSon(N);
+            n.addSon(Expression());
+            return n;
+        }
+        else if(check("minus")){
+            Node n = new Node("sub", 0);
+            n.addSon(N);
+            n.addSon(Expression());
+            return n;
+        }
+        else if(check("multiply")){
+            Node n = new Node("mul", 0);
+            n.addSon(N);
+            n.addSon(Expression());
+            return n;
+        }
+        else if(check("divide")){
+            Node n = new Node("div", 0);
+            n.addSon(N);
+            n.addSon(Expression());
+            return n;
+        }
+        else{
+            return N;
+        }
     }
-    Node Prefix(){
+    Node Prefix() throws errSyntaxique {
         if(check("moins")){
             Node N = Prefix();
             Node M = new Node("moins", 0);
@@ -188,23 +240,25 @@ public class Main {
             return Suffix();
         }
     }
-    Node Suffix(){
+    Node Suffix() throws errSyntaxique {
         return Atome();
     }
-    Node Atome(){
+    Node Atome() throws errSyntaxique {
         if(check("number")){
             return new Node("number", current.getValeur());
         }
         else if(check("parOpen")) {
             //check if next is an expression
+            next();
             Node N = Expression();
             if (!check("parClose")) {
-                //throw an error
+                throw new errSyntaxique("Missing closing parenthesis");
             }
+            next();
             return N;
         }
         else{
-            //throw an error
+            throw new errSyntaxique("Not a valid expression");
         }
     }
 
