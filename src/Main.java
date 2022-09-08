@@ -196,6 +196,14 @@ public class Main {
                 n.addSon(Instruction());
             }
             return n;
+        } else if (check("int")) {
+            Node n = new Node ("declaration",0);
+            while(!check("pointVirgule") || check("virgule")){
+                n.addSon(Expression());
+            }
+            return n;
+
+
         }
         Node n = Expression();
         accept("pointVirgule");
@@ -285,8 +293,10 @@ public class Main {
             }
             next();
             return N;
-        }
-        else{
+        } else if (check("idant")) {
+            return new Node ("idant",0);
+
+        } else{
             throw new errSyntaxique("Not a valid expression");
         }
     }
