@@ -28,6 +28,7 @@ public class Main {
         i++;
         switch (lettre) {
             case '\n':
+            case '\t':
             case ' ': //Space or end of a word
                 last = current;
                 current = new Token(Token.TYPE_SPACE, 0, lineIndex);
