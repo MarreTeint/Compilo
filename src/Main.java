@@ -1,6 +1,5 @@
 import java.io.*;
 
-import java.util.ArrayList;
 import java.util.HashMap;
 
 public class Main {
@@ -31,43 +30,47 @@ public class Main {
             case '\n':
             case ' ': //Space or end of a word
                 last = current;
-                current = new Token("espace", 0, lineIndex);
+                current = new Token(Token.TYPE_SPACE, 0, lineIndex);
                 break;
             case '(': //Opened bracket
                 last = current;
-                current = new Token("parOpen", 0, lineIndex);
+                current = new Token(Token.TYPE_PAR_OPEN, 0, lineIndex);
                 break;
             case ')': //Closed bracket
                 last = current;
-                current = new Token("parClose", 0, lineIndex);
+                current = new Token(Token.TYPE_PAR_CLOSE, 0, lineIndex);
                 break;
             case '{': //Oppened accolade
                 last = current;
-                current = new Token("accoladeOpen", 0, lineIndex);
+                current = new Token(Token.TYPE_ACC_OPEN, 0, lineIndex);
                 break;
             case '}': //Closed accolade
                 last = current;
-                current = new Token("accoladeClose", 0, lineIndex);
+                current = new Token(Token.TYPE_ACC_CLOSE, 0, lineIndex);
                 break;
             case ';': //Closed accolade
                 last = current;
-                current = new Token("pointVirgule", 0, lineIndex);
+                current = new Token(Token.TYPE_POINT_VIRGULE, 0, lineIndex);
                 break;
             case '+': //Plus
                 last = current;
-                current = new Token("plus", 0, lineIndex);
+                current = new Token(Token.TYPE_PLUS, 0, lineIndex);
                 break;
             case '-': //Minus
                 last = current;
-                current = new Token("minus", 0, lineIndex);
+                current = new Token(Token.TYPE_MINUS, 0, lineIndex);
                 break;
             case '*': //Multiply
                 last = current;
-                current = new Token("multiply", 0, lineIndex);
+                current = new Token(Token.TYPE_MULTIPLY, 0, lineIndex);
                 break;
             case '/': //Divide
                 last = current;
-                current = new Token("divide", 0, lineIndex);
+                current = new Token(Token.TYPE_DIVIDE, 0, lineIndex);
+                break;
+            case '!'://Not
+                last = current;
+                current = new Token(Token.TYPE_NOT, 0, lineIndex);
                 break;
             case 'a': case 'b': case 'c': case 'd': case 'e': case 'f':
             case 'g': case 'h': case 'i': case 'j': case 'k': case 'l':
@@ -86,7 +89,7 @@ public class Main {
                 try {
                     processWord(word, lineIndex);
                 }
-                catch (errLexical e) {
+                catch (ErrLexical e) {
                     System.out.println(e.getMessage());
                 }
                 word = "";
@@ -99,12 +102,14 @@ public class Main {
                     i++;
                 }
                 last = current;
-                current = new Token("constante", 0, lineIndex);
+                current = new Token(Token.TYPE_CONSTANT, 0, lineIndex);
                 constante = "";
                 break;
+            default:
+                current = new Token(Token.TYPE_EOS, 0, lineIndex);
         }
 
-        current = new Token("EOS", 0, lineIndex);
+        System.out.println("Current token : " + current.getType());
     }
 
     public static void initSymboles() {
@@ -123,22 +128,46 @@ public class Main {
         symboles.put(")",   new int[]{5, 1});
     }
 
-    public static void processWord(String word, int lineIndex) throws errLexical {
-        if (word.equals("return")) {
+    public static void processWord(String word, int lineIndex) throws ErrLexical {
+        if (word.equals(Token.TYPE_RETURN)) { //TODO : ATTENTION, ne pas utiliser les Token.type pour RECONAITRE autre chose que des mots (mais bien utiliser pour le reste)
             last = current;
-            current = new Token("return", 0, lineIndex);
-        } else if (word.equals("int")) {
+            current = new Token(Token.TYPE_RETURN, 0, lineIndex);
+        } else if (word.equals(Token.TYPE_INT)) {
             last = current;
-            current = new Token("int", 0, lineIndex);
-        } else if (word.equals("if")) {
+            current = new Token(Token.TYPE_INT, 0, lineIndex);
+        } else if (word.equals(Token.TYPE_IF)) {
             last = current;
-            current = new Token("if", 0, lineIndex);
+            current = new Token(Token.TYPE_IF, 0, lineIndex);
+        } else if (word.equals(Token.TYPE_ELSE)) {
+            last = current;
+            current = new Token(Token.TYPE_ELSE, 0, lineIndex);
+        } else if (word.equals(Token.TYPE_WHILE)) {
+            last = current;
+            current = new Token(Token.TYPE_WHILE, 0, lineIndex);
+        } else if (word.equals(Token.TYPE_FOR)) {
+            last = current;
+            current = new Token(Token.TYPE_FOR, 0, lineIndex);
+        } else if (word.equals(Token.TYPE_DO)) {
+            last = current;
+            current = new Token(Token.TYPE_DO, 0, lineIndex);
+        } else if (word.equals(Token.TYPE_BREAK)) {
+            last = current;
+            current = new Token(Token.TYPE_BREAK, 0, lineIndex);
+        } else if (word.equals(Token.TYPE_CONTINUE)) {
+            last = current;
+            current = new Token(Token.TYPE_CONTINUE, 0, lineIndex);
+        } else if (word.equals(Token.TYPE_AND)) {
+            last = current;
+            current = new Token(Token.TYPE_AND, 0, lineIndex);
+        } else if (word.equals(Token.TYPE_OR)) {
+            last = current;
+            current = new Token(Token.TYPE_OR, 0, lineIndex);
         }
-        /*else {
+        else {
             last = current;
-            current = new Token("mot", 0, lineIndex);
-        }*/
-        throw new errLexical("Unknown word", lineIndex);
+            current = new Token(Token.TYPE_IDENT, 0, lineIndex);
+        }
+        throw new ErrLexical("Unknown word", lineIndex);
     }
 
     public static boolean check(String type) {
@@ -159,73 +188,72 @@ public class Main {
 
     //Analyse syntaxique
 
-    public static Node Syntaxe() throws errSyntaxique {
+    public static Node Syntaxe() throws ErrSyntaxique {
         next();
-        if(check("EOS")){
+        if(check(Token.TYPE_EOS)){
             return null;
         }
-        System.out.println(current.toString());
         Node N = Global();
         return N;
     }
 
-    static Node Global() throws errSyntaxique {
+    static Node Global() throws ErrSyntaxique {
         return  Function();
     }
-    static Node Function() throws errSyntaxique {
+    static Node Function() throws ErrSyntaxique {
         return Instruction();
     }
-    static Node Instruction() throws errSyntaxique {
-        if(check("if")){
-            accept("parOpen");
+    static Node Instruction() throws ErrSyntaxique {
+        if(check(Token.TYPE_IF)){
+            accept(Token.TYPE_PAR_OPEN);
             Node texte = Expression();
-            accept("parClose");
+            accept(Token.TYPE_PAR_CLOSE);
             Node then = Instruction();
-            if(check("else")){
+            if(check(Token.TYPE_ELSE)){
                 Node elsee = Instruction();
-                Node n = new Node("if", 0);
+                Node n = new Node(Token.TYPE_IF, 0);
                 n.addSon(texte);
                 n.addSon(then);
                 n.addSon(elsee);
                 return n;
             }
         }
-        else if(check("accoladeopen")){
+        else if(check(Token.TYPE_ACC_OPEN)){
             Node n = new Node("block", 0);
-            while(!check("accoladeclose")){
+            while(!check(Token.TYPE_ACC_CLOSE)){
                 n.addSon(Instruction());
             }
             return n;
         }
         Node n = Expression();
-        accept("pointVirgule");
+        accept(Token.TYPE_POINT_VIRGULE);
         Node N = new Node("drop", 0);
         N.addSon(n);
         return N;
     }
     //TODO faire ca
-    static Node Expression() throws errSyntaxique {
+    static Node Expression() throws ErrSyntaxique {
         Node N = Prefix();
-        if(check("plus")){
-            Node n = new Node("add", 0);
+        if(check(Token.TYPE_PLUS)){
+            Node n = new Node(Token.TYPE_PLUS, 0);
             n.addSon(N);
             n.addSon(Expression());
             return n;
         }
-        else if(check("minus")){
-            Node n = new Node("sub", 0);
+        else if(check(Token.TYPE_MINUS)){
+            Node n = new Node(Token.TYPE_MINUS, 0);
             n.addSon(N);
             n.addSon(Expression());
             return n;
         }
-        else if(check("multiply")){
-            Node n = new Node("mul", 0);
+        else if(check(Token.TYPE_MULTIPLY)){
+            Node n = new Node(Token.TYPE_MULTIPLY, 0);
             n.addSon(N);
             n.addSon(Expression());
             return n;
         }
-        else if(check("divide")){
-            Node n = new Node("div", 0);
+        else if(check(Token.TYPE_DIVIDE)){
+            Node n = new Node(Token.TYPE_MULTIPLY, 0);
             n.addSon(N);
             n.addSon(Expression());
             return n;
@@ -234,34 +262,34 @@ public class Main {
             return N;
         }
     }
-    static Node Prefix() throws errSyntaxique {
-        if(check("moins")){
+    static Node Prefix() throws ErrSyntaxique {
+        if(check(Token.TYPE_MINUS)){
             Node N = Prefix();
-            Node M = new Node("moins", 0);
+            Node M = new Node(Token.TYPE_MULTIPLY, 0);
             M.addSon(N);
             return M;
         }
-        else if(check("plus")){
+        else if(check(Token.TYPE_PLUS)){
             Node N = Prefix();
-            Node M = new Node("plus", 0);
+            Node M = new Node(Token.TYPE_PLUS, 0);
             M.addSon(N);
             return M;
         }
-        else if (check("multiply")){
+        else if (check(Token.TYPE_MULTIPLY)){
             Node N = Prefix();
-            Node M = new Node("multiply", 0);
+            Node M = new Node(Token.TYPE_MULTIPLY, 0);
             M.addSon(N);
             return M;
         }
-        else if (check("divide")){
+        else if (check(Token.TYPE_DIVIDE)){
             Node N = Prefix();
-            Node M = new Node("divide", 0);
+            Node M = new Node(Token.TYPE_DIVIDE, 0);
             M.addSon(N);
             return M;
         }
-        else if (check("negation")){
+        else if (check(Token.TYPE_NOT)){
             Node N = Prefix();
-            Node M = new Node("negation", 0);
+            Node M = new Node(Token.TYPE_NOT, 0);
             M.addSon(N);
             return M;
         }
@@ -269,25 +297,25 @@ public class Main {
             return Suffix();
         }
     }
-    static Node Suffix() throws errSyntaxique {
+    static Node Suffix() throws ErrSyntaxique {
         return Atome();
     }
-    static Node Atome() throws errSyntaxique {
-        if(check("number")){
-            return new Node("number", current.getValeur());
+    static Node Atome() throws ErrSyntaxique {
+        if(check(Token.TYPE_CONSTANT)){
+            return new Node(Token.TYPE_CONSTANT, current.getValeur());
         }
-        else if(check("parOpen")) {
+        else if(check(Token.TYPE_PAR_OPEN)) {
             //check if next is an expression
             next();
             Node N = Expression();
-            if (!check("parClose")) {
-                throw new errSyntaxique("Missing closing parenthesis");
+            if (!check(Token.TYPE_PAR_CLOSE)) {
+                throw new ErrSyntaxique("Missing closing parenthesis");
             }
             next();
             return N;
         }
         else{
-            throw new errSyntaxique("Not a valid expression");
+            throw new ErrSyntaxique("Not a valid expression");
         }
     }
 
@@ -310,7 +338,7 @@ public class Main {
         }
         try {
             Syntaxe();
-        } catch (errSyntaxique errSyntaxique) {
+        } catch (ErrSyntaxique errSyntaxique) {
             System.out.println("Erreur Syntaxique : " + errSyntaxique.getMessage());
         }
         System.out.println(inside);
