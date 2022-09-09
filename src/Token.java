@@ -63,6 +63,7 @@ public class Token {
     public static String TYPE_ACC_OPEN = "accoladeOuv";
     public static String TYPE_ACC_CLOSE = "accoladeFerm";
     public static String TYPE_POINT_VIRGULE = "pointVirgule";
+    public static String TYPE_VIRGULE = "virgule";
     public static String TYPE_AFFECTATION = "affectation";
     public static String TYPE_INF = "inferieur";
     public static String TYPE_SUP = "superieur";

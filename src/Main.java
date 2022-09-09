@@ -211,7 +211,7 @@ public class Main {
             Node then = Instruction();
             if(check(Token.TYPE_ELSE)){
                 Node elsee = Instruction();
-                Node n = new Node(Token.TYPE_IF, 0);
+                Node n = new Node("if", 0);
                 n.addSon(texte);
                 n.addSon(then);
                 n.addSon(elsee);
@@ -224,54 +224,54 @@ public class Main {
                 n.addSon(Instruction());
             }
             return n;
-        } else if (check("int")) {
+        } else if (check(Token.TYPE_IF)) {
             Node n = new Node ("declaration",0);
-            while(!check("pointVirgule") || check("virgule")){
+            while(!check(Token.TYPE_POINT_VIRGULE) || check(Token.TYPE_VIRGULE)){
                 n.addSon(Expression());
             }
             return n;
 
 
         }
-        else if(check("while")){
+        else if(check(Token.TYPE_WHILE)){
             Node n = new Node("loop", 0);
             Node m = new Node("condition", 0);
             n.addSon(m);
-            accept("parOpen");
+            accept(Token.TYPE_PAR_OPEN);
             m.addSon(Expression());
-            accept("parClose");
+            accept(Token.TYPE_PAR_CLOSE);
             m.addSon(Instruction());
             m.addSon(new Node("break", 0));
             return n;
         }
-        else if (check("for")) {
+        else if (check(Token.TYPE_FOR)) {
             Node n = new Node("Sequence",0);
             Node m = new Node("loop", 0);
             Node p = new Node("condition", 0);
-            accept("parOpen");
+            accept(Token.TYPE_PAR_OPEN);
             n.addSon(Expression());
-            accept("pointVirgule");
+            accept(Token.TYPE_POINT_VIRGULE);
             n.addSon(m);
             p.addSon(Expression());
-            accept("pointVirgule");
+            accept(Token.TYPE_POINT_VIRGULE);
             Node temp = Expression();
-            accept("parClose");
+            accept(Token.TYPE_PAR_CLOSE);
             m.addSon(Instruction());
             m.addSon(temp);
             m.addSon(p);
             return n;
 
         }
-        else if(check("do")){
+        else if(check(Token.TYPE_DO)){
             Node n = new Node("loop", 0);
             n.addSon(Instruction());
             Node m = new Node("condition", 0);
             n.addSon(m);
-            accept("while");
-            accept("parOpen");
+            accept(Token.TYPE_WHILE);
+            accept(Token.TYPE_PAR_OPEN);
             m.addSon(Expression());
-            accept("parClose");
-            accept("pointVirgule");
+            accept(Token.TYPE_PAR_CLOSE);
+            accept(Token.TYPE_POINT_VIRGULE);
             m.addSon(new Node("break", 0));
             return n;
         }
@@ -281,28 +281,28 @@ public class Main {
         N.addSon(n);
         return N;
     }
-    static Node Expression() throws errSyntaxique {
+    static Node Expression() throws ErrSyntaxique {
         Node N = Prefix();
         if(check(Token.TYPE_PLUS)){
-            Node n = new Node(Token.TYPE_PLUS, 0);
+            Node n = new Node("plus", 0);
             n.addSon(N);
             n.addSon(Expression());
             return n;
         }
         else if(check(Token.TYPE_MINUS)){
-            Node n = new Node(Token.TYPE_MINUS, 0);
+            Node n = new Node("moins", 0);
             n.addSon(N);
             n.addSon(Expression());
             return n;
         }
         else if(check(Token.TYPE_MULTIPLY)){
-            Node n = new Node(Token.TYPE_MULTIPLY, 0);
+            Node n = new Node("multiplication", 0);
             n.addSon(N);
             n.addSon(Expression());
             return n;
         }
         else if(check(Token.TYPE_DIVIDE)){
-            Node n = new Node(Token.TYPE_MULTIPLY, 0);
+            Node n = new Node("division", 0);
             n.addSon(N);
             n.addSon(Expression());
             return n;
@@ -314,31 +314,31 @@ public class Main {
     static Node Prefix() throws ErrSyntaxique {
         if(check(Token.TYPE_MINUS)){
             Node N = Prefix();
-            Node M = new Node(Token.TYPE_MULTIPLY, 0);
+            Node M = new Node("moins", 0);
             M.addSon(N);
             return M;
         }
         else if(check(Token.TYPE_PLUS)){
             Node N = Prefix();
-            Node M = new Node(Token.TYPE_PLUS, 0);
+            Node M = new Node("plus", 0);
             M.addSon(N);
             return M;
         }
         else if (check(Token.TYPE_MULTIPLY)){
             Node N = Prefix();
-            Node M = new Node(Token.TYPE_MULTIPLY, 0);
+            Node M = new Node("multiplication", 0);
             M.addSon(N);
             return M;
         }
         else if (check(Token.TYPE_DIVIDE)){
             Node N = Prefix();
-            Node M = new Node(Token.TYPE_DIVIDE, 0);
+            Node M = new Node("division", 0);
             M.addSon(N);
             return M;
         }
         else if (check(Token.TYPE_NOT)){
             Node N = Prefix();
-            Node M = new Node(Token.TYPE_NOT, 0);
+            Node M = new Node("negation", 0);
             M.addSon(N);
             return M;
         }
@@ -351,7 +351,7 @@ public class Main {
     }
     static Node Atome() throws ErrSyntaxique {
         if(check(Token.TYPE_CONSTANT)){
-            return new Node(Token.TYPE_CONSTANT, current.getValeur());
+            return new Node("constante", current.getValeur());
         }
         else if(check(Token.TYPE_PAR_OPEN)) {
             //check if next is an expression
@@ -362,11 +362,11 @@ public class Main {
             }
             next();
             return N;
-        } else if (check("idant")) {
-            return new Node ("idant",0);
+        } else if (check(Token.TYPE_IDENT)) {
+            return new Node ("ident",0);
 
         } else{
-            throw new errSyntaxique("Not a valid expression");
+            throw new ErrSyntaxique("Not a valid expression");
         }
     }
 
@@ -396,8 +396,8 @@ public class Main {
         }
         try {
             Syntaxe();
-        } catch (ErrSyntaxique errSyntaxique) {
-            System.out.println("Erreur Syntaxique : " + errSyntaxique.getMessage());
+        } catch (ErrSyntaxique ErrSyntaxique) {
+            System.out.println("Erreur Syntaxique : " + ErrSyntaxique.getMessage());
         }
         System.out.println(inside);
     }*/
