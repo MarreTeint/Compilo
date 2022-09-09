@@ -224,6 +224,56 @@ public class Main {
                 n.addSon(Instruction());
             }
             return n;
+        } else if (check("int")) {
+            Node n = new Node ("declaration",0);
+            while(!check("pointVirgule") || check("virgule")){
+                n.addSon(Expression());
+            }
+            return n;
+
+
+        }
+        else if(check("while")){
+            Node n = new Node("loop", 0);
+            Node m = new Node("condition", 0);
+            n.addSon(m);
+            accept("parOpen");
+            m.addSon(Expression());
+            accept("parClose");
+            m.addSon(Instruction());
+            m.addSon(new Node("break", 0));
+            return n;
+        }
+        else if (check("for")) {
+            Node n = new Node("Sequence",0);
+            Node m = new Node("loop", 0);
+            Node p = new Node("condition", 0);
+            accept("parOpen");
+            n.addSon(Expression());
+            accept("pointVirgule");
+            n.addSon(m);
+            p.addSon(Expression());
+            accept("pointVirgule");
+            Node temp = Expression();
+            accept("parClose");
+            m.addSon(Instruction());
+            m.addSon(temp);
+            m.addSon(p);
+            return n;
+
+        }
+        else if(check("do")){
+            Node n = new Node("loop", 0);
+            n.addSon(Instruction());
+            Node m = new Node("condition", 0);
+            n.addSon(m);
+            accept("while");
+            accept("parOpen");
+            m.addSon(Expression());
+            accept("parClose");
+            accept("pointVirgule");
+            m.addSon(new Node("break", 0));
+            return n;
         }
         Node n = Expression();
         accept(Token.TYPE_POINT_VIRGULE);
@@ -231,8 +281,7 @@ public class Main {
         N.addSon(n);
         return N;
     }
-    //TODO faire ca
-    static Node Expression() throws ErrSyntaxique {
+    static Node Expression() throws errSyntaxique {
         Node N = Prefix();
         if(check(Token.TYPE_PLUS)){
             Node n = new Node(Token.TYPE_PLUS, 0);
@@ -313,21 +362,30 @@ public class Main {
             }
             next();
             return N;
-        }
-        else{
-            throw new ErrSyntaxique("Not a valid expression");
+        } else if (check("idant")) {
+            return new Node ("idant",0);
+
+        } else{
+            throw new errSyntaxique("Not a valid expression");
         }
     }
 
     //Analyse sémantique
 
     //Génration de code
+    static void genCode(String fileName, Node codeTree) throws IOException {
+        String code = ".start\n";
+        code += "halt\n";
+        FileWriter fileWriter = new FileWriter(fileName);
+        fileWriter.write(code);
+        fileWriter.close();
+    }
     public static void main(String[] args) {
 
-        String fileName = args[0];
+        /*String fileName = args[0];
         initSymboles();
         try {
-            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "ASCII"));//jsp prk plus besoin du src/
+            BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "ASCII"));
             String line;
             while ((line = br.readLine()) != null) {
                 inside += line;
@@ -342,5 +400,13 @@ public class Main {
             System.out.println("Erreur Syntaxique : " + errSyntaxique.getMessage());
         }
         System.out.println(inside);
+    }*/
+        String fileOut = args[1];
+        try {
+            genCode(args[1], new Node("test", 0));
+        } catch (IOException e) {
+            throw new RuntimeException(e);
+        }
     }
+
 }

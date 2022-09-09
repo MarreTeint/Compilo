@@ -3,11 +3,19 @@ public class Token {
     String type;
     int valeur;
     int ligne;
+    int adresse;
 
     public Token(String type, int valeur, int ligne) {
         this.type = type;
         this.valeur = valeur;
         this.ligne = ligne;
+    }
+
+    public Token(String type, int valeur, int ligne, int adresse) {
+        this.type = type;
+        this.valeur = valeur;
+        this.ligne = ligne;
+        this.adresse = adresse;
     }
 
     public Token(String type, int valeur) {
@@ -25,6 +33,10 @@ public class Token {
 
     public int getLigne() {
         return ligne;
+    }
+
+    public int getAdresse() {
+        return adresse;
     }
 
     @Override
