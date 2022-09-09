@@ -382,7 +382,7 @@ public class Main {
     }
     public static void main(String[] args) {
 
-        /*String fileName = args[0];
+        String fileName = args[0];
         initSymboles();
         try {
             BufferedReader br = new BufferedReader(new InputStreamReader(new FileInputStream(fileName), "ASCII"));
@@ -400,7 +400,6 @@ public class Main {
             System.out.println("Erreur Syntaxique : " + ErrSyntaxique.getMessage());
         }
         System.out.println(inside);
-    }*/
         String fileOut = args[1];
         try {
             genCode(args[1], new Node("test", 0));
@@ -409,4 +408,7 @@ public class Main {
         }
     }
 
+
 }
+
+
