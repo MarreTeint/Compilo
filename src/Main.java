@@ -1,5 +1,4 @@
 import java.io.*;
-
 import java.util.HashMap;
 
 public class Main {
@@ -24,7 +23,10 @@ public class Main {
 
 
         lineIndex++;
-        char lettre = inside.charAt(i);
+        char lettre;
+        if(i < inside.length()) {
+            lettre = inside.charAt(i);
+
         i++;
         switch (lettre) {
             case '\n':
@@ -106,8 +108,12 @@ public class Main {
                 current = new Token(Token.TYPE_CONSTANT, 0, lineIndex);
                 constante = "";
                 break;
-            default:
-                current = new Token(Token.TYPE_EOS, 0, lineIndex);
+            /*default:
+                current = new Token(Token.TYPE_EOS, 0, lineIndex);*/
+        }
+        }
+        else{
+            current = new Token(Token.TYPE_EOS, 0, lineIndex);
         }
 
         System.out.println("Current token : " + current.getType());
@@ -180,11 +186,16 @@ public class Main {
         return false;
     }
 
-    public static boolean accept(String type) {
+
+
+
+
+    public static boolean accept(String type) throws ErrSyntaxique {
         if (check(type)) {
             return true;
         }
-        return false;
+        throw new ErrSyntaxique("Expected " + type + " but found " + current.type);
+
     }
 
     //Analyse syntaxique
