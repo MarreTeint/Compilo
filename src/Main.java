@@ -168,7 +168,7 @@ public class Main {
             last = current;
             current = new Token(Token.TYPE_IDENT, 0, lineIndex);
         }
-        throw new ErrLexical("Unknown word", lineIndex);
+        //throw new ErrLexical("Unknown word", lineIndex);
     }
 
     public static boolean check(String type) {
@@ -194,7 +194,11 @@ public class Main {
         if(check(Token.TYPE_EOS)){
             return null;
         }
-        Node N = Global();
+        Node N = new Node();
+        while (current.type != Token.TYPE_EOS) {
+            N = Global();
+            next();
+        }
         return N;
     }
 
