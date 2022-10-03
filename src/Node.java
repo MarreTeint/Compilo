@@ -1,4 +1,5 @@
 public class Node {
+    //TODO : add a field for the type of the node ident with adress and variable
     private String type;
     private int value;
     private Node[] sons;

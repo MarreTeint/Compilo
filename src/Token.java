@@ -69,7 +69,7 @@ public class Token {
     public static String TYPE_SUP = "superieur";
     public static String TYPE_INF_EGAL = "inferieurEgal";
     public static String TYPE_SUP_EGAL = "superieurEgal";
-    public static String TYPE_EGAL = "egal";
+    public static String TYPE_COMP = "comparaison";
     public static String TYPE_DIFF = "different";
     public static String TYPE_FOR = "for";
     public static String TYPE_WHILE = "while";

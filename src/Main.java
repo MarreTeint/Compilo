@@ -10,7 +10,7 @@ public class Main {
     public static String inside = "";
     public static int i = 0;
 
-    public static void next() {
+    public static void next() throws ErrLexical {
         last = current;
 
         //Initialisation variables
@@ -77,7 +77,7 @@ public class Main {
                 break;
             case '!'://Not
                 last = current;
-                if(i+1 < inside.lenght() && inside.charAt(i+1) == '=') {
+                if(i+1 < inside.length() && inside.charAt(i+1) == '=') {
                     current = new Token(Token.TYPE_DIFF, 0, lineIndex);
                 } else {
                     current = new Token(Token.TYPE_NOT, 0, lineIndex);
@@ -85,15 +85,15 @@ public class Main {
                 break;
             case '='://Affectation
                 last = current;
-                if(i+1 < inside.lenght() && inside.charAt(i+1) == '=') {
-                    current = new Token(Token.TYPE_EGAL, 0, lineIndex);
+                if(i+1 < inside.length() && inside.charAt(i+1) == '=') {
+                    current = new Token(Token.TYPE_COMP, 0, lineIndex);
                 } else {
                     current = new Token(Token.TYPE_AFFECTATION, 0, lineIndex);
                 }
                 break;
             case '<'://Less than
                 last = current;
-                if(i+1 < inside.lenght() && inside.charAt(i+1) == '=') {
+                if(i+1 < inside.length() && inside.charAt(i+1) == '=') {
                     current = new Token(Token.TYPE_INF_EGAL, 0, lineIndex);
                 } else {
                     current = new Token(Token.TYPE_INF, 0, lineIndex);
@@ -101,7 +101,7 @@ public class Main {
                 break;
             case '>'://Greater than
                 last = current;
-                if(i+1 < inside.lenght() && inside.charAt(i+1) == '=') {
+                if(i+1 < inside.length() && inside.charAt(i+1) == '=') {
                     current = new Token(Token.TYPE_SUP_EGAL, 0, lineIndex);
                 } else {
                     current = new Token(Token.TYPE_SUP, 0, lineIndex);
@@ -109,18 +109,18 @@ public class Main {
                 break;
             case '&':
                 last = current;
-                if(i+1 < inside.lenght() && inside.charAt(i+1) == '&') {
+                if(i+1 < inside.length() && inside.charAt(i+1) == '&') {
                     current = new Token(Token.TYPE_AND, 0, lineIndex);
                 } else {
-                    current = new Token(Token.TYPE_ERROR, 0, lineIndex);
+                    throw new ErrLexical("Error at line " + lineIndex + ": & is not a valid operator");
                 }
                 break;
             case '|':
                 last = current;
-                if(i+1 < inside.lenght() && inside.charAt(i+1) == '|') {
+                if(i+1 < inside.length() && inside.charAt(i+1) == '|') {
                     current = new Token(Token.TYPE_OR, 0, lineIndex);
                 } else {
-                    current = new Token(Token.TYPE_ERROR, 0, lineIndex);
+                    throw new ErrLexical("Error at line " + lineIndex + ": | is not a valid operator");
                 }
                 break;
             case 'a': case 'b': case 'c': case 'd': case 'e': case 'f':
@@ -219,7 +219,7 @@ public class Main {
         //throw new ErrLexical("Unknown word", lineIndex);
     }
 
-    public static boolean check(String type) {
+    public static boolean check(String type) throws ErrLexical {
         while (current.type == Token.TYPE_SPACE) {
             next();
         }
@@ -235,7 +235,7 @@ public class Main {
 
 
 
-    public static boolean accept(String type) throws ErrSyntaxique {
+    public static boolean accept(String type) throws ErrSyntaxique, ErrLexical {
         //ignore token espace
 
         if (check(type)) {
@@ -247,7 +247,7 @@ public class Main {
 
     //Analyse syntaxique
 
-    public static Node Syntaxe() throws ErrSyntaxique {
+    public static Node Syntaxe() throws ErrSyntaxique, ErrLexical {
         next();
         if(check(Token.TYPE_EOS)){
             return null;
@@ -260,13 +260,13 @@ public class Main {
         return N;
     }
 
-    static Node Global() throws ErrSyntaxique {
+    static Node Global() throws ErrSyntaxique, ErrLexical {
         return  Function();
     }
-    static Node Function() throws ErrSyntaxique {
+    static Node Function() throws ErrSyntaxique, ErrLexical {
         return Instruction();
     }
-    static Node Instruction() throws ErrSyntaxique {
+    static Node Instruction() throws ErrSyntaxique, ErrLexical {
         if(check(Token.TYPE_IF)){
             accept(Token.TYPE_PAR_OPEN);
             Node texte = Expression();
@@ -287,9 +287,16 @@ public class Main {
                 n.addSon(Instruction());
             }
             return n;
-        } else if (check(Token.TYPE_IF)) {
+        } else if (check(Token.TYPE_INT)) {
             Node n = new Node ("declaration",0);
-            while(!check(Token.TYPE_POINT_VIRGULE) || check(Token.TYPE_VIRGULE)){
+            boolean passed = false;
+            while(!check(Token.TYPE_POINT_VIRGULE)){
+                if(passed){
+                    accept(Token.TYPE_VIRGULE);
+                }
+                else {
+                    passed = true;
+                }
                 n.addSon(Expression());
             }
             return n;
@@ -344,7 +351,7 @@ public class Main {
         N.addSon(n);
         return N;
     }
-    static Node Expression() throws ErrSyntaxique {
+    static Node Expression() throws ErrSyntaxique, ErrLexical {
         Node N = Prefix();
         if(check(Token.TYPE_PLUS)){
             Node n = new Node("plus", 0);
@@ -369,12 +376,21 @@ public class Main {
             n.addSon(N);
             n.addSon(Expression());
             return n;
-        }
-        else{
+        } else if (check(Token.TYPE_AFFECTATION)) {
+            Node n = new Node("affectation", 0);
+            n.addSon(N);
+            n.addSon(Expression());
+            return n;
+        } else if (check(Token.TYPE_COMP)) {
+            Node n = new Node("comparaison", 0);
+            n.addSon(N);
+            n.addSon(Expression());
+            return n;
+        } else{
             return N;
         }
     }
-    static Node Prefix() throws ErrSyntaxique {
+    static Node Prefix() throws ErrSyntaxique, ErrLexical {
         if(check(Token.TYPE_MINUS)){
             Node N = Prefix();
             Node M = new Node("moins", 0);
@@ -409,10 +425,10 @@ public class Main {
             return Suffix();
         }
     }
-    static Node Suffix() throws ErrSyntaxique {
+    static Node Suffix() throws ErrSyntaxique, ErrLexical {
         return Atome();
     }
-    static Node Atome() throws ErrSyntaxique {
+    static Node Atome() throws ErrSyntaxique, ErrLexical {
         if(check(Token.TYPE_CONSTANT)){
             return new Node("constante", current.getValeur());
         }
@@ -434,7 +450,7 @@ public class Main {
     }
 
     //Analyse sémantique
-    static void ASem() throws ErrSyntaxique {
+    static void ASem() throws ErrSyntaxique, ErrLexical {
         int nvar = 0;
         Node N = Syntaxe();
         /*ASemNode(N);
@@ -444,9 +460,9 @@ public class Main {
     //Génration de code
     static void genCode(String fileName, Node codeTree) throws IOException {
         String code = "";
-        do{
-            //code += genNode(codeTree);
-        }while(current.type != Token.TYPE_EOS);
+        /*do{
+            code += genNode(codeTree);
+        }while(current.type != Token.TYPE_EOS);*/
         code += ".start\n";
         code += "prep main\n";
         code += "call 0\n";
@@ -473,6 +489,8 @@ public class Main {
             Syntaxe();
         } catch (ErrSyntaxique ErrSyntaxique) {
             System.out.println("Erreur Syntaxique : " + ErrSyntaxique.getMessage());
+        } catch (ErrLexical e) {
+            throw new RuntimeException(e);
         }
         //System.out.println(inside);
         String fileOut = args[1];
