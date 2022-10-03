@@ -77,27 +77,51 @@ public class Main {
                 break;
             case '!'://Not
                 last = current;
-                current = new Token(Token.TYPE_NOT, 0, lineIndex);
+                if(i+1 < inside.lenght() && inside.charAt(i+1) == '=') {
+                    current = new Token(Token.TYPE_DIFF, 0, lineIndex);
+                } else {
+                    current = new Token(Token.TYPE_NOT, 0, lineIndex);
+                }
                 break;
             case '='://Affectation
                 last = current;
-                current = new Token(Token.TYPE_AFFECTATION, 0, lineIndex);
+                if(i+1 < inside.lenght() && inside.charAt(i+1) == '=') {
+                    current = new Token(Token.TYPE_EGAL, 0, lineIndex);
+                } else {
+                    current = new Token(Token.TYPE_AFFECTATION, 0, lineIndex);
+                }
                 break;
             case '<'://Less than
                 last = current;
-                current = new Token(Token.TYPE_INF, 0, lineIndex);
+                if(i+1 < inside.lenght() && inside.charAt(i+1) == '=') {
+                    current = new Token(Token.TYPE_INF_EGAL, 0, lineIndex);
+                } else {
+                    current = new Token(Token.TYPE_INF, 0, lineIndex);
+                }
                 break;
             case '>'://Greater than
                 last = current;
-                current = new Token(Token.TYPE_SUP, 0, lineIndex);
+                if(i+1 < inside.lenght() && inside.charAt(i+1) == '=') {
+                    current = new Token(Token.TYPE_SUP_EGAL, 0, lineIndex);
+                } else {
+                    current = new Token(Token.TYPE_SUP, 0, lineIndex);
+                }
                 break;
-            case '<='://Less than or equal
+            case '&':
                 last = current;
-                current = new Token(Token.TYPE_INF_EGAL, 0, lineIndex);
+                if(i+1 < inside.lenght() && inside.charAt(i+1) == '&') {
+                    current = new Token(Token.TYPE_AND, 0, lineIndex);
+                } else {
+                    current = new Token(Token.TYPE_ERROR, 0, lineIndex);
+                }
                 break;
-            case '>='://Greater than or equal
+            case '|':
                 last = current;
-                current = new Token(Token.TYPE_SUP_EGAL, 0, lineIndex);
+                if(i+1 < inside.lenght() && inside.charAt(i+1) == '|') {
+                    current = new Token(Token.TYPE_OR, 0, lineIndex);
+                } else {
+                    current = new Token(Token.TYPE_ERROR, 0, lineIndex);
+                }
                 break;
             case 'a': case 'b': case 'c': case 'd': case 'e': case 'f':
             case 'g': case 'h': case 'i': case 'j': case 'k': case 'l':
@@ -187,18 +211,6 @@ public class Main {
         } else if (word.equals(Token.TYPE_CONTINUE)) {
             last = current;
             current = new Token(Token.TYPE_CONTINUE, 0, lineIndex);
-        } else if (word.equals(Token.TYPE_AND)) {
-            last = current;
-            current = new Token(Token.TYPE_AND, 0, lineIndex);
-        } else if (word.equals(Token.TYPE_OR)) {
-            last = current;
-            current = new Token(Token.TYPE_OR, 0, lineIndex);
-        } else if (word.equals(Token.TYPE_EGUAL)) {
-            last = current;
-            current = new Token(Token.TYPE_EGUAL, 0, lineIndex);
-        } else if (word.equals(Token.TYPE_DIFF)) {
-            last = current;
-            current = new Token(Token.TYPE_DIFF, 0, lineIndex);
         }
         else {
             last = current;
