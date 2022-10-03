@@ -1,5 +1,4 @@
 import java.io.*;
-
 import java.util.HashMap;
 
 public class Main {
@@ -24,7 +23,10 @@ public class Main {
 
 
         lineIndex++;
-        char lettre = inside.charAt(i);
+        char lettre;
+        if(i < inside.length()) {
+            lettre = inside.charAt(i);
+
         i++;
         switch (lettre) {
             case '\n':
@@ -106,8 +108,12 @@ public class Main {
                 current = new Token(Token.TYPE_CONSTANT, 0, lineIndex);
                 constante = "";
                 break;
-            default:
-                current = new Token(Token.TYPE_EOS, 0, lineIndex);
+            /*default:
+                current = new Token(Token.TYPE_EOS, 0, lineIndex);*/
+        }
+        }
+        else{
+            current = new Token(Token.TYPE_EOS, 0, lineIndex);
         }
 
         System.out.println("Current token : " + current.getType());
@@ -168,10 +174,13 @@ public class Main {
             last = current;
             current = new Token(Token.TYPE_IDENT, 0, lineIndex);
         }
-        throw new ErrLexical("Unknown word", lineIndex);
+        //throw new ErrLexical("Unknown word", lineIndex);
     }
 
     public static boolean check(String type) {
+        while (current.type == Token.TYPE_SPACE) {
+            next();
+        }
         if (current.type == type) {
             last = current;
             next();
@@ -180,11 +189,18 @@ public class Main {
         return false;
     }
 
-    public static boolean accept(String type) {
+
+
+
+
+    public static boolean accept(String type) throws ErrSyntaxique {
+        //ignore token espace
+
         if (check(type)) {
             return true;
         }
-        return false;
+        throw new ErrSyntaxique("Expected " + type + " but found " + current.type);
+
     }
 
     //Analyse syntaxique
@@ -194,7 +210,11 @@ public class Main {
         if(check(Token.TYPE_EOS)){
             return null;
         }
-        Node N = Global();
+        Node N = new Node();
+        while (current.type != Token.TYPE_EOS) {
+            N = Global();
+            next();
+        }
         return N;
     }
 
@@ -367,15 +387,27 @@ public class Main {
             return new Node ("ident",0);
 
         } else{
-            throw new ErrSyntaxique("Not a valid expression");
+            throw new ErrSyntaxique("Not a valid expression atome");
         }
     }
 
     //Analyse sémantique
+    static void ASem() throws ErrSyntaxique {
+        int nvar = 0;
+        Node N = Syntaxe();
+        /*ASemNode(N);
+        N.nvar = nvar;*/
+    }
 
     //Génration de code
     static void genCode(String fileName, Node codeTree) throws IOException {
-        String code = ".start\n";
+        String code = "";
+        do{
+            //code += genNode(codeTree);
+        }while(current.type != Token.TYPE_EOS);
+        code += ".start\n";
+        code += "prep main\n";
+        code += "call 0\n";
         code += "halt\n";
         FileWriter fileWriter = new FileWriter(fileName);
         fileWriter.write(code);
@@ -400,7 +432,7 @@ public class Main {
         } catch (ErrSyntaxique ErrSyntaxique) {
             System.out.println("Erreur Syntaxique : " + ErrSyntaxique.getMessage());
         }
-        System.out.println(inside);
+        //System.out.println(inside);
         String fileOut = args[1];
         try {
             genCode(args[1], new Node("test", 0));
