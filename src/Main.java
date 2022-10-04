@@ -19,7 +19,7 @@ public class Main {
         boolean isAWord = false;
         String word = "";
         boolean isAConst = false;
-        String constante = "";
+        String constant = "";
 
 
         lineIndex++;
@@ -55,7 +55,7 @@ public class Main {
                 last = current;
                 current = new Token(Token.TYPE_POINT_VIRGULE, 0, lineIndex);
                 break;
-            case ',':
+            case ',': //Coma
                 last = current;
                 current = new Token(Token.TYPE_VIRGULE, 0, lineIndex);
                 break;
@@ -117,7 +117,7 @@ public class Main {
                     i++;
                     current = new Token(Token.TYPE_AND, 0, lineIndex);
                 } else {
-                    throw new ErrLexical("Error at line " + lineIndex + ": & is not a valid operator");
+                    throw new ErrLexical(ERR_INTRO + " " + lineIndex + ". '&' is not a valid operator");
                 }
                 break;
             case '|':
@@ -126,7 +126,7 @@ public class Main {
                     i++;
                     current = new Token(Token.TYPE_OR, 0, lineIndex);
                 } else {
-                    throw new ErrLexical("Error at line " + lineIndex + ": | is not a valid operator");
+                    throw new ErrLexical(ERR_INTRO + " " + " " + lineIndex + ". '|' is not a valid operator");
                 }
                 break;
             case 'a': case 'b': case 'c': case 'd': case 'e': case 'f':
@@ -153,14 +153,14 @@ public class Main {
                 break;
             case '1': case '2': case '3': case '4': case '5': case '6':
             case '7': case '8': case '9':
-                constante = constante + lettre;
+                constant = constant + lettre;
                 while((i+1) < inside.length() && (inside.charAt(i) >= '1' && inside.charAt(i) <= '9')) {
                     word = word + inside.charAt(i);
                     i++;
                 }
                 last = current;
                 current = new Token(Token.TYPE_CONSTANT, 0, lineIndex);
-                constante = "";
+                constant = "";
                 break;
             /*default:
                 current = new Token(Token.TYPE_EOS, 0, lineIndex);*/
@@ -169,7 +169,7 @@ public class Main {
         else{
             current = new Token(Token.TYPE_EOS, 0, lineIndex);
         }
-
+        //Debug :
         System.out.println("Current token : " + current.getType());
 
     }
@@ -191,7 +191,7 @@ public class Main {
     }
 
     public static void processWord(String word, int lineIndex) throws ErrLexical {
-        if (word.equals(Token.TYPE_RETURN)) { //TODO : ATTENTION, ne pas utiliser les Token.type pour RECONAITRE autre chose que des mots (mais bien utiliser pour le reste)
+        if (word.equals(Token.TYPE_RETURN)) { //ATTENTION, ne pas utiliser les Token.type pour RECONAITRE autre chose que des mots (mais bien utiliser pour le reste)
             last = current;
             current = new Token(Token.TYPE_RETURN, 0, lineIndex);
         } else if (word.equals(Token.TYPE_INT)) {
@@ -240,11 +240,10 @@ public class Main {
 
     public static boolean accept(String type) throws ErrSyntaxique, ErrLexical {
         //ignore token espace
-
         if (check(type)) {
             return true;
         }
-        throw new ErrSyntaxique("Expected " + type + " but found " + current.type);
+        throw new ErrSyntaxique(ERR_INTRO + " " + current.getLigne() + ". Expected " + type + " but found " + current.type);
 
     }
 
@@ -439,14 +438,14 @@ public class Main {
             next();
             Node N = Expression();
             if (!check(Token.TYPE_PAR_CLOSE)) {
-                throw new ErrSyntaxique("Missing closing parenthesis");
+                throw new ErrSyntaxique(ERR_INTRO + " " + current.getLigne() + ". Missing closing parenthesis");
             }
             next();
             return N;
         } else if (check(Token.TYPE_IDENT)) {
             return new Node (Node.TYPE_VAR, 0);
         } else{
-            throw new ErrSyntaxique("Not a valid expression atome");
+            throw new ErrSyntaxique(ERR_INTRO + " " + current.getLigne() + ". Not a valid expression atome");
         }
     }
 
@@ -484,12 +483,12 @@ public class Main {
                 inside+='\n';
             }
         } catch (IOException e) {
-            System.out.println("Erreur : Fichier introuvable");
+            System.out.println("Errorr : File unfoud");
         }
         try {
             Syntaxe();
         } catch (ErrSyntaxique ErrSyntaxique) {
-            System.out.println("Erreur Syntaxique : " + ErrSyntaxique.getMessage());
+            System.out.println("Syntaxic error : " + ErrSyntaxique.getMessage());
         } catch (ErrLexical e) {
             throw new RuntimeException(e);
         }
@@ -502,6 +501,7 @@ public class Main {
         }
     }
 
+    public static String ERR_INTRO = "Error at line";
 
 }
 
