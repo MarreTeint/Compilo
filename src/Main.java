@@ -231,10 +231,6 @@ public class Main {
         return false;
     }
 
-
-
-
-
     public static boolean accept(String type) throws ErrSyntaxique, ErrLexical {
         //ignore token espace
 
@@ -275,7 +271,7 @@ public class Main {
             Node then = Instruction();
             if(check(Token.TYPE_ELSE)){
                 Node elsee = Instruction();
-                Node n = new Node("if", 0);
+                Node n = new Node(Node.TYPE_IF, 0);
                 n.addSon(texte);
                 n.addSon(then);
                 n.addSon(elsee);
@@ -283,13 +279,14 @@ public class Main {
             }
         }
         else if(check(Token.TYPE_ACC_OPEN)){
-            Node n = new Node("block", 0);
+            Node n = new Node(Node.TYPE_DECLARATION, 0);
             while(!check(Token.TYPE_ACC_CLOSE)){
                 n.addSon(Instruction());
             }
+            No
             return n;
         } else if (check(Token.TYPE_INT)) {
-            Node n = new Node ("declaration",0);
+            Node n = new Node (Node.TYPE_DECLARATION,0);
             boolean passed = false;
             while(!check(Token.TYPE_POINT_VIRGULE)){
                 if(passed){
@@ -301,24 +298,22 @@ public class Main {
                 n.addSon(Expression());
             }
             return n;
-
-
         }
         else if(check(Token.TYPE_WHILE)){
-            Node n = new Node("loop", 0);
-            Node m = new Node("condition", 0);
+            Node n = new Node(Node.TYPE_LOOP, 0);
+            Node m = new Node(Node.TYPE_CONDITION, 0);
             n.addSon(m);
             accept(Token.TYPE_PAR_OPEN);
             m.addSon(Expression());
             accept(Token.TYPE_PAR_CLOSE);
             m.addSon(Instruction());
-            m.addSon(new Node("break", 0));
+            m.addSon(new Node(Node.TYPE_BREAK, 0));
             return n;
         }
         else if (check(Token.TYPE_FOR)) {
-            Node n = new Node("Sequence",0);
-            Node m = new Node("loop", 0);
-            Node p = new Node("condition", 0);
+            Node n = new Node(Node.TYPE_SEQUENCE,0);
+            Node m = new Node(Node.TYPE_LOOP, 0);
+            Node p = new Node(Node.TYPE_CONDITION, 0);
             accept(Token.TYPE_PAR_OPEN);
             n.addSon(Expression());
             accept(Token.TYPE_POINT_VIRGULE);
@@ -334,56 +329,56 @@ public class Main {
 
         }
         else if(check(Token.TYPE_DO)){
-            Node n = new Node("loop", 0);
+            Node n = new Node(Node.TYPE_LOOP, 0);
             n.addSon(Instruction());
-            Node m = new Node("condition", 0);
+            Node m = new Node(Node.TYPE_CONDITION, 0);
             n.addSon(m);
             accept(Token.TYPE_WHILE);
             accept(Token.TYPE_PAR_OPEN);
             m.addSon(Expression());
             accept(Token.TYPE_PAR_CLOSE);
             accept(Token.TYPE_POINT_VIRGULE);
-            m.addSon(new Node("break", 0));
+            m.addSon(new Node(Node.TYPE_BREAK, 0));
             return n;
         }
         Node n = Expression();
         accept(Token.TYPE_POINT_VIRGULE);
-        Node N = new Node("drop", 0);
+        Node N = new Node(Node.TYPE_DROP, 0);
         N.addSon(n);
         return N;
     }
     static Node Expression() throws ErrSyntaxique, ErrLexical {
         Node N = Prefix();
         if(check(Token.TYPE_PLUS)){
-            Node n = new Node("plus", 0);
+            Node n = new Node(Node.TYPE_PLUS, 0);
             n.addSon(N);
             n.addSon(Expression());
             return n;
         }
         else if(check(Token.TYPE_MINUS)){
-            Node n = new Node("moins", 0);
+            Node n = new Node(Node.TYPE_MINUS, 0);
             n.addSon(N);
             n.addSon(Expression());
             return n;
         }
         else if(check(Token.TYPE_MULTIPLY)){
-            Node n = new Node("multiplication", 0);
+            Node n = new Node(Node.TYPE_MULTIPLY, 0);
             n.addSon(N);
             n.addSon(Expression());
             return n;
         }
         else if(check(Token.TYPE_DIVIDE)){
-            Node n = new Node("division", 0);
+            Node n = new Node(Node.TYPE_DIVIDE, 0);
             n.addSon(N);
             n.addSon(Expression());
             return n;
         } else if (check(Token.TYPE_AFFECTATION)) {
-            Node n = new Node("affectation", 0);
+            Node n = new Node(Node.TYPE_AFFECTATION, 0);
             n.addSon(N);
             n.addSon(Expression());
             return n;
         } else if (check(Token.TYPE_COMP)) {
-            Node n = new Node("comparaison", 0);
+            Node n = new Node(Node.TYPE_COMP, 0);
             n.addSon(N);
             n.addSon(Expression());
             return n;
@@ -394,31 +389,31 @@ public class Main {
     static Node Prefix() throws ErrSyntaxique, ErrLexical {
         if(check(Token.TYPE_MINUS)){
             Node N = Prefix();
-            Node M = new Node("moins", 0);
+            Node M = new Node(Node.TYPE_MINUS, 0);
             M.addSon(N);
             return M;
         }
         else if(check(Token.TYPE_PLUS)){
             Node N = Prefix();
-            Node M = new Node("plus", 0);
+            Node M = new Node(Node.TYPE_PLUS, 0);
             M.addSon(N);
             return M;
         }
         else if (check(Token.TYPE_MULTIPLY)){
             Node N = Prefix();
-            Node M = new Node("multiplication", 0);
+            Node M = new Node(Node.TYPE_MULTIPLY, 0);
             M.addSon(N);
             return M;
         }
         else if (check(Token.TYPE_DIVIDE)){
             Node N = Prefix();
-            Node M = new Node("division", 0);
+            Node M = new Node(Node.TYPE_DIVIDE, 0);
             M.addSon(N);
             return M;
         }
         else if (check(Token.TYPE_NOT)){
             Node N = Prefix();
-            Node M = new Node("negation", 0);
+            Node M = new Node(Node.TYPE_NOT, 0);
             M.addSon(N);
             return M;
         }
@@ -431,7 +426,7 @@ public class Main {
     }
     static Node Atome() throws ErrSyntaxique, ErrLexical {
         if(check(Token.TYPE_CONSTANT)){
-            return new Node("constante", current.getValeur());
+            return new Node(Node.TYPE_CONSTANT, current.getValeur());
         }
         else if(check(Token.TYPE_PAR_OPEN)) {
             //check if next is an expression
@@ -443,7 +438,7 @@ public class Main {
             next();
             return N;
         } else if (check(Token.TYPE_IDENT)) {
-            return new Node ("ident",0);
+            return new Node (Node.TYPE_IDENT,0);
 
         } else{
             throw new ErrSyntaxique("Not a valid expression atome");
@@ -496,7 +491,7 @@ public class Main {
         //System.out.println(inside);
         String fileOut = args[1];
         try {
-            genCode(args[1], new Node("test", 0));
+            genCode(args[1], new Node(Node.TYPE_TEST, 0));
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
