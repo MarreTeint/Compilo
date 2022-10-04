@@ -78,6 +78,7 @@ public class Main {
             case '!'://Not
                 last = current;
                 if(i+1 < inside.length() && inside.charAt(i+1) == '=') {
+                    i++;
                     current = new Token(Token.TYPE_DIFF, 0, lineIndex);
                 } else {
                     current = new Token(Token.TYPE_NOT, 0, lineIndex);
@@ -85,7 +86,8 @@ public class Main {
                 break;
             case '='://Affectation
                 last = current;
-                if(i+1 < inside.length() && inside.charAt(i+1) == '=') {
+                if(i < inside.length() && inside.charAt(i) == '=') {
+                    i++;
                     current = new Token(Token.TYPE_COMP, 0, lineIndex);
                 } else {
                     current = new Token(Token.TYPE_AFFECTATION, 0, lineIndex);
@@ -93,7 +95,8 @@ public class Main {
                 break;
             case '<'://Less than
                 last = current;
-                if(i+1 < inside.length() && inside.charAt(i+1) == '=') {
+                if(i < inside.length() && inside.charAt(i) == '=') {
+                    i++;
                     current = new Token(Token.TYPE_INF_EGAL, 0, lineIndex);
                 } else {
                     current = new Token(Token.TYPE_INF, 0, lineIndex);
@@ -101,7 +104,8 @@ public class Main {
                 break;
             case '>'://Greater than
                 last = current;
-                if(i+1 < inside.length() && inside.charAt(i+1) == '=') {
+                if(i < inside.length() && inside.charAt(i) == '=') {
+                    i++;
                     current = new Token(Token.TYPE_SUP_EGAL, 0, lineIndex);
                 } else {
                     current = new Token(Token.TYPE_SUP, 0, lineIndex);
@@ -109,7 +113,8 @@ public class Main {
                 break;
             case '&':
                 last = current;
-                if(i+1 < inside.length() && inside.charAt(i+1) == '&') {
+                if(i < inside.length() && inside.charAt(i) == '&') {i++;
+                    i++;
                     current = new Token(Token.TYPE_AND, 0, lineIndex);
                 } else {
                     throw new ErrLexical("Error at line " + lineIndex + ": & is not a valid operator");
@@ -117,7 +122,8 @@ public class Main {
                 break;
             case '|':
                 last = current;
-                if(i+1 < inside.length() && inside.charAt(i+1) == '|') {
+                if(i < inside.length() && inside.charAt(i) == '|') {
+                    i++;
                     current = new Token(Token.TYPE_OR, 0, lineIndex);
                 } else {
                     throw new ErrLexical("Error at line " + lineIndex + ": | is not a valid operator");
@@ -165,6 +171,7 @@ public class Main {
         }
 
         System.out.println("Current token : " + current.getType());
+
     }
 
     public static void initSymboles() {
