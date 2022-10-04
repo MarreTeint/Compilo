@@ -65,7 +65,7 @@ public class Node {
     public static String TYPE_SEQUENCE = "sequence";
     public static String TYPE_DROP = "drop";
     public static String TYPE_PLUS = Token.TYPE_PLUS;
-    public static String TYPE_MINUS = Token.TUPES_MINUS;
+    public static String TYPE_MINUS = Token.TYPE_MINUS;
     public static String TYPE_MULTIPLY = Token.TYPE_MULTIPLY;
     public static String TYPE_DIVIDE = Token.TYPE_DIVIDE;
     public static String TYPE_AFFECTATION = Token.TYPE_AFFECTATION;
