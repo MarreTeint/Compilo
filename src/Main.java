@@ -257,7 +257,7 @@ public class Main {
             N = Global();
             next();
         }
-        Node.printTree(N);
+        Node.printTree(N,0);
         return N;
     }
 
@@ -443,7 +443,7 @@ public class Main {
             next();
             return N;
         } else if (check(Token.TYPE_IDENT)) {
-            return new Node ("ident",0);
+            return new Node ("var",0 );
 
         } else{
             throw new ErrSyntaxique("Not a valid expression atome");
