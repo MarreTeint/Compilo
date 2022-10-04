@@ -290,7 +290,6 @@ public class Main {
             while(!check(Token.TYPE_ACC_CLOSE)){
                 n.addSon(Instruction());
             }
-            No
             return n;
         } else if (check(Token.TYPE_INT)) {
             Node n = new Node (Node.TYPE_DECLARATION,0);
