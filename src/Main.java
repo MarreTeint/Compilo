@@ -55,7 +55,7 @@ public class Main {
                 last = current;
                 current = new Token(Token.TYPE_POINT_VIRGULE, 0, lineIndex);
                 break;
-            case ',':
+            case ',': //Coma
                 last = current;
                 current = new Token(Token.TYPE_VIRGULE, 0, lineIndex);
                 break;
@@ -112,7 +112,7 @@ public class Main {
                 if(i+1 < inside.length() && inside.charAt(i+1) == '&') {
                     current = new Token(Token.TYPE_AND, 0, lineIndex);
                 } else {
-                    throw new ErrLexical("Error at line " + lineIndex + ": & is not a valid operator");
+                    throw new ErrLexical(ERR_INTRO + " " + lineIndex + ". '&' is not a valid operator");
                 }
                 break;
             case '|':
@@ -120,7 +120,7 @@ public class Main {
                 if(i+1 < inside.length() && inside.charAt(i+1) == '|') {
                     current = new Token(Token.TYPE_OR, 0, lineIndex);
                 } else {
-                    throw new ErrLexical("Error at line " + lineIndex + ": | is not a valid operator");
+                    throw new ErrLexical(ERR_INTRO + " " + " " + lineIndex + ". '|' is not a valid operator");
                 }
                 break;
             case 'a': case 'b': case 'c': case 'd': case 'e': case 'f':
@@ -233,11 +233,10 @@ public class Main {
 
     public static boolean accept(String type) throws ErrSyntaxique, ErrLexical {
         //ignore token espace
-
         if (check(type)) {
             return true;
         }
-        throw new ErrSyntaxique("Expected " + type + " but found " + current.type);
+        throw new ErrSyntaxique(ERR_INTRO + " " + current.getLigne() + ". Expected " + type + " but found " + current.type);
 
     }
 
@@ -283,7 +282,6 @@ public class Main {
             while(!check(Token.TYPE_ACC_CLOSE)){
                 n.addSon(Instruction());
             }
-            No
             return n;
         } else if (check(Token.TYPE_INT)) {
             Node n = new Node (Node.TYPE_DECLARATION,0);
@@ -433,7 +431,7 @@ public class Main {
             next();
             Node N = Expression();
             if (!check(Token.TYPE_PAR_CLOSE)) {
-                throw new ErrSyntaxique("Missing closing parenthesis");
+                throw new ErrSyntaxique(ERR_INTRO + " " + current.getLigne() + ". Missing closing parenthesis");
             }
             next();
             return N;
@@ -441,7 +439,7 @@ public class Main {
             return new Node (Node.TYPE_IDENT,0);
 
         } else{
-            throw new ErrSyntaxique("Not a valid expression atome");
+            throw new ErrSyntaxique(ERR_INTRO + " " + current.getLigne() + ". Not a valid expression atome");
         }
     }
 
@@ -497,6 +495,7 @@ public class Main {
         }
     }
 
+    public static String ERR_INTRO = "Error at line";
 
 }
 
