@@ -257,6 +257,7 @@ public class Main {
             N = Global();
             next();
         }
+        Node.printTree(N);
         return N;
     }
 

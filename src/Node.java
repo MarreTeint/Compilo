@@ -1,7 +1,7 @@
 public class Node {
     //TODO : add a field for the type of the node ident with adress and variable
     private String type;
-    private int value;
+    private int value,adresse;
     private Node[] sons;
 
     public Node(String type, int value) {
@@ -39,5 +39,12 @@ public class Node {
         }
         newSons[sons.length] = son;
         sons = newSons;
+    }
+
+    public static void printTree(Node Parent){
+        System.out.println("Type: " + Parent.getType() + " Value: " + Parent.getValue());
+        for (int i = 0; i < Parent.getSons().length; i++) {
+            printTree(Parent.getSons()[i]);
+        }
     }
 }
