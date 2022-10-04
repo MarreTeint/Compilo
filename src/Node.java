@@ -1,6 +1,6 @@
 public class Node {
     //TODO : add a field for the type of the node ident with adress and variable
-    private String type;
+    private String type;//name is for variable
     private int value,adresse;
     private Node[] sons;
 
@@ -13,6 +13,12 @@ public class Node {
         this.type = type;
         this.value = value;
         this.sons = sons;
+    }
+    public Node(String type, String name, int adresse) {
+        this.type = type;
+        this.value = value;
+        this.adresse = adresse;
+        this.sons = new Node[0];
     }
 
     public Node(){
@@ -41,10 +47,12 @@ public class Node {
         sons = newSons;
     }
 
-    public static void printTree(Node Parent){
-        System.out.println("Type: " + Parent.getType() + " Value: " + Parent.getValue());
+    public static void printTree(Node Parent,int depth){
+        System.out.println("Type: " + Parent.getType()+" Depth " +depth);
+
+
         for (int i = 0; i < Parent.getSons().length; i++) {
-            printTree(Parent.getSons()[i]);
+            printTree(Parent.getSons()[i],depth+1);
         }
     }
 
@@ -65,5 +73,6 @@ public class Node {
     public static String TYPE_NOT = Token.TYPE_NOT;
     public static String TYPE_CONSTANT = Token.TYPE_CONSTANT;
     public static String TYPE_IDENT = Token.TYPE_IDENT;
+    public static String TYPE_VAR = "var";
     public static String TYPE_TEST = "test";
 }
