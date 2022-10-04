@@ -19,7 +19,7 @@ public class Main {
         boolean isAWord = false;
         String word = "";
         boolean isAConst = false;
-        String constante = "";
+        String constant = "";
 
 
         lineIndex++;
@@ -153,14 +153,14 @@ public class Main {
                 break;
             case '1': case '2': case '3': case '4': case '5': case '6':
             case '7': case '8': case '9':
-                constante = constante + lettre;
+                constant = constant + lettre;
                 while((i+1) < inside.length() && (inside.charAt(i) >= '1' && inside.charAt(i) <= '9')) {
                     word = word + inside.charAt(i);
                     i++;
                 }
                 last = current;
                 current = new Token(Token.TYPE_CONSTANT, 0, lineIndex);
-                constante = "";
+                constant = "";
                 break;
             /*default:
                 current = new Token(Token.TYPE_EOS, 0, lineIndex);*/
@@ -169,7 +169,7 @@ public class Main {
         else{
             current = new Token(Token.TYPE_EOS, 0, lineIndex);
         }
-
+        //Debug :
         System.out.println("Current token : " + current.getType());
 
     }
@@ -191,7 +191,7 @@ public class Main {
     }
 
     public static void processWord(String word, int lineIndex) throws ErrLexical {
-        if (word.equals(Token.TYPE_RETURN)) { //TODO : ATTENTION, ne pas utiliser les Token.type pour RECONAITRE autre chose que des mots (mais bien utiliser pour le reste)
+        if (word.equals(Token.TYPE_RETURN)) { //ATTENTION, ne pas utiliser les Token.type pour RECONAITRE autre chose que des mots (mais bien utiliser pour le reste)
             last = current;
             current = new Token(Token.TYPE_RETURN, 0, lineIndex);
         } else if (word.equals(Token.TYPE_INT)) {
@@ -483,12 +483,12 @@ public class Main {
                 inside+='\n';
             }
         } catch (IOException e) {
-            System.out.println("Erreur : Fichier introuvable");
+            System.out.println("Errorr : File unfoud");
         }
         try {
             Syntaxe();
         } catch (ErrSyntaxique ErrSyntaxique) {
-            System.out.println("Erreur Syntaxique : " + ErrSyntaxique.getMessage());
+            System.out.println("Syntaxic error : " + ErrSyntaxique.getMessage());
         } catch (ErrLexical e) {
             throw new RuntimeException(e);
         }
