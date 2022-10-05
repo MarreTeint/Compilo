@@ -183,9 +183,11 @@ public class Main {
     static Node Global() throws ErrSyntaxique, ErrLexical {
         return  Function();
     }
+    
     static Node Function() throws ErrSyntaxique, ErrLexical {
         return Instruction();
     }
+
     static Node Instruction() throws ErrSyntaxique, ErrLexical {
         if(check(Token.TYPE_IF)){
             accept(Token.TYPE_PAR_OPEN);
