@@ -3,31 +3,28 @@ import java.util.HashMap;
 
 public class Main {
 
-    public static Token current = new Token(null, 0, 0);
-    public static Token last = new Token(null, 0, 0);
-    //Key = operator, [0] = precedence, [1] = associativity
-    public static HashMap<String, int[]> symboles = new HashMap<String, int[]>();
-    public static String inside = "";
-    public static int i = 0;
+    public static final String ERR_INTRO = "Error at line";
+
+    public static Token                  current =  new Token(null, 0, 0);
+    public static Token                  last =     new Token(null, 0, 0);
+    public static HashMap<String, int[]> symboles = new HashMap<String, int[]>(); //Key = operator, [0] = precedence, [1] = associativity
+    public static String                 inside =   "";
+    public static int                    i =        0;
 
     public static void next() throws ErrLexical {
-        last = current;
 
-        //Initialisation variables
-        String line;
         int lineIndex = 0;
-        boolean isAWord = false;
+        char letter;
         String word = "";
-        boolean isAConst = false;
         String constant = "";
 
-
+        last = current;
         lineIndex++;
-        char lettre;
+
         if(i < inside.length()) {
-            lettre = inside.charAt(i);
+            letter = inside.charAt(i);
             i++;
-            switch (lettre) {
+            switch (letter) {
                 case Symbole.RETURN:
                 case Symbole.TAB:
                 case Symbole.SPACE:
@@ -131,7 +128,7 @@ public class Main {
                 case 'K': case 'L': case 'M': case 'N': case 'O': case 'P':
                 case 'Q': case 'R': case 'S': case 'T': case 'U': case 'V':
                 case 'W': case 'X': case 'Y': case 'Z':
-                    word = word + lettre;
+                    word = word + letter;
                     while((i+1) < inside.length() && (inside.charAt(i) >= 'a' && inside.charAt(i) <= 'z' || inside.charAt(i) >= 'A' && inside.charAt(i) <= 'Z')) {
                         word = word + inside.charAt(i);
                         i++;
@@ -146,7 +143,7 @@ public class Main {
                     break;
                 case '1': case '2': case '3': case '4': case '5': case '6':
                 case '7': case '8': case '9':
-                    constant = constant + lettre;
+                    constant = constant + letter;
                     while((i+1) < inside.length() && (inside.charAt(i) >= '1' && inside.charAt(i) <= '9')) {
                         word = word + inside.charAt(i);
                         i++;
@@ -162,7 +159,7 @@ public class Main {
         else{
             current = new Token(Token.TYPE_EOS, 0, lineIndex);
         }
-        //Debug :
+        //Debug
         System.out.println("Current token : " + current.getType());
 
     }
@@ -184,7 +181,7 @@ public class Main {
     }
 
     public static void processWord(String word, int lineIndex) throws ErrLexical {
-        if (word.equals(Token.TYPE_RETURN)) { //ATTENTION, ne pas utiliser les Token.type pour RECONAITRE autre chose que des mots (mais bien utiliser pour le reste)
+        if (word.equals(Token.TYPE_RETURN)) { //ATTENTION, ne pas utiliser les Token.type pour RECONAITRE autre chose que des mots
             last = current;
             current = new Token(Token.TYPE_RETURN, 0, lineIndex);
         } else if (word.equals(Token.TYPE_INT)) {
@@ -464,7 +461,6 @@ public class Main {
         fileWriter.close();
     }
     public static void main(String[] args) {
-
         String fileName = args[0];
         initSymboles();
         try {
@@ -493,7 +489,4 @@ public class Main {
             throw new RuntimeException(e);
         }
     }
-
-    public static String ERR_INTRO = "Error at line";
-
 }

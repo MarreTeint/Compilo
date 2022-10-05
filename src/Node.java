@@ -56,23 +56,23 @@ public class Node {
         }
     }
 
-    public static String TYPE_IF = Token.TYPE_IF;
-    public static String TYPE_BLOCK = "block";
-    public static String TYPE_DECLARATION = "declaration";
-    public static String TYPE_LOOP = "loop";
-    public static String TYPE_CONDITION = "condition";
-    public static String TYPE_BREAK = Token.TYPE_BREAK;
-    public static String TYPE_SEQUENCE = "sequence";
-    public static String TYPE_DROP = "drop";
-    public static String TYPE_PLUS = Token.TYPE_PLUS;
-    public static String TYPE_MINUS = Token.TYPE_MINUS;
-    public static String TYPE_MULTIPLY = Token.TYPE_MULTIPLY;
-    public static String TYPE_DIVIDE = Token.TYPE_DIVIDE;
-    public static String TYPE_AFFECTATION = Token.TYPE_AFFECTATION;
-    public static String TYPE_COMP = Token.TYPE_COMP;
-    public static String TYPE_NOT = Token.TYPE_NOT;
-    public static String TYPE_CONSTANT = Token.TYPE_CONSTANT;
-    public static String TYPE_IDENT = Token.TYPE_IDENT;
-    public static String TYPE_VAR = "var";
-    public static String TYPE_TEST = "test";
+    public static final String TYPE_IF = Token.TYPE_IF;
+    public static final String TYPE_BLOCK = "block";
+    public static final String TYPE_DECLARATION = "declaration";
+    public static final String TYPE_LOOP = "loop";
+    public static final String TYPE_CONDITION = "condition";
+    public static final String TYPE_BREAK = Token.TYPE_BREAK;
+    public static final String TYPE_SEQUENCE = "sequence";
+    public static final String TYPE_DROP = "drop";
+    public static final String TYPE_PLUS = Token.TYPE_PLUS;
+    public static final String TYPE_MINUS = Token.TYPE_MINUS;
+    public static final String TYPE_MULTIPLY = Token.TYPE_MULTIPLY;
+    public static final String TYPE_DIVIDE = Token.TYPE_DIVIDE;
+    public static final String TYPE_AFFECTATION = Token.TYPE_AFFECTATION;
+    public static final String TYPE_COMP = Token.TYPE_COMP;
+    public static final String TYPE_NOT = Token.TYPE_NOT;
+    public static final String TYPE_CONSTANT = Token.TYPE_CONSTANT;
+    public static final String TYPE_IDENT = Token.TYPE_IDENT;
+    public static final String TYPE_VAR = "var";
+    public static final String TYPE_TEST = "test";
 }

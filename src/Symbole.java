@@ -26,7 +26,7 @@ public class Symbole {
     public static final String DIFF = "!=";
     public static final String INF_EGAL = "<=";
     public static final String SUP_EGAL = ">=";
-    public static final String AND = "&&";
-    public static final String OR = "||";
+    //public static final String AND = "&&";
+    //public static final String OR = "||";
 
 }
