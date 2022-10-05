@@ -74,5 +74,4 @@ public class Node {
     public static final String TYPE_CONSTANT = Token.TYPE_CONSTANT;
     public static final String TYPE_IDENT = Token.TYPE_IDENT;
     public static final String TYPE_VAR = "var";
-    public static final String TYPE_TEST = "test";
 }
