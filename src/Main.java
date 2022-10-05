@@ -134,7 +134,7 @@ public class Main {
                 }
                 word = "";
                 break;
-            case '1': case '2': case '3': case '4': case '5': case '6':
+            case '0': case '1': case '2': case '3': case '4': case '5': case '6':
             case '7': case '8': case '9':
                 constant = constant + lettre;
                 while((i+1) < inside.length() && (inside.charAt(i) >= '1' && inside.charAt(i) <= '9')) {
@@ -250,6 +250,16 @@ public class Main {
         return  Function();
     }
     static Node Function() throws ErrSyntaxique, ErrLexical {
+        if(check(Token.TYPE_INT)){
+            if(check(Token.TYPE_IDENT)){
+                if(check(Token.TYPE_PAR_OPEN)){
+                    accept(Token.TYPE_PAR_CLOSE);
+                    Node n = new Node(Node.TYPE_FUNCTION, current.getValeur());
+                    n.addSon(Instruction());
+                    return n;
+                }
+            }
+        }
         return Instruction();
     }
     static Node Instruction() throws ErrSyntaxique, ErrLexical {
@@ -268,21 +278,13 @@ public class Main {
             }
         }
         else if(check(Token.TYPE_ACC_OPEN)){
-            Node n = new Node(Node.TYPE_DECLARATION, 0);
+            Node n = new Node(Node.TYPE_BLOCK, 0);
             while(!check(Token.TYPE_ACC_CLOSE)){
                 n.addSon(Instruction());
             }
             return n;
         } else if (check(Token.TYPE_INT)) {
-            accept(Token.TYPE_IDENT);
-            if(check(Token.TYPE_PAR_OPEN)){
-                Node n = new Node(Node.TYPE_FUNCTION, current.getValeur());
-                n.addSon(new Node(Node.TYPE_IDENT, last.getLigne()));
-                accept(Token.TYPE_PAR_CLOSE);
-                n.addSon(Instruction());
-                return n;
-            }
-            else if(check(Token.TYPE_AFFECTATION)){
+
                 Node n = new Node (Node.TYPE_DECLARATION,0);
                 boolean passed = false;
                 while(!check(Token.TYPE_SEMICOL)){
@@ -295,11 +297,12 @@ public class Main {
                     n.addSon(Expression());
                 }
                 return n;
-            }
+
         } else if (check(Token.TYPE_RETURN)) {
             Node n = new Node(Node.TYPE_RETURN, 0);
             n.addSon(Expression());
             accept(Token.TYPE_SEMICOL);
+            return n;
         } else if(check(Token.TYPE_WHILE)){
             Node n = new Node(Node.TYPE_LOOP, 0);
             Node m = new Node(Node.TYPE_CONDITION, 0);
