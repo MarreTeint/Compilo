@@ -1,5 +1,6 @@
 public class Symbole {
 
+    //CHAR SYMBOLS
     public static final char RETURN = '\n';
     public static final char TAB = '\t';
     public static final char SPACE = ' ';
@@ -17,7 +18,15 @@ public class Symbole {
     public static final char AFFECTATION = '=';
     public static final char SUP = '<';
     public static final char INF = '>';
-    public static final char AND = '&';
-    public static final char OR = '|';
+    public static final char SINGLE_AND = '&';
+    public static final char SINGLE_OR = '|';
+
+    //STRING SYMBOLS
+    public static final String COMP = "==";
+    public static final String DIFF = "!=";
+    public static final String INF_EGAL = "<=";
+    public static final String SUP_EGAL = ">=";
+    public static final String AND = "&&";
+    public static final String OR = "||";
 
 }

@@ -76,7 +76,7 @@ public class Main {
                     break;
                 case Symbole.NOT:
                     last = current;
-                    if(i+1 < inside.length() && inside.charAt(i+1) == '=') {
+                    if(i+1 < inside.length() && inside.charAt(i+1) == Symbole.AFFECTATION) {
                         current = new Token(Token.TYPE_DIFF, 0, lineIndex);
                     } else {
                         current = new Token(Token.TYPE_NOT, 0, lineIndex);
@@ -84,7 +84,7 @@ public class Main {
                     break;
                 case Symbole.AFFECTATION:
                     last = current;
-                    if(i+1 < inside.length() && inside.charAt(i+1) == '=') {
+                    if(i+1 < inside.length() && inside.charAt(i+1) == Symbole.AFFECTATION) {
                         current = new Token(Token.TYPE_COMP, 0, lineIndex);
                     } else {
                         current = new Token(Token.TYPE_AFFECTATION, 0, lineIndex);
@@ -92,7 +92,7 @@ public class Main {
                     break;
                 case Symbole.INF:
                     last = current;
-                    if(i+1 < inside.length() && inside.charAt(i+1) == '=') {
+                    if(i+1 < inside.length() && inside.charAt(i+1) == Symbole.AFFECTATION) {
                         current = new Token(Token.TYPE_INF_EGAL, 0, lineIndex);
                     } else {
                         current = new Token(Token.TYPE_INF, 0, lineIndex);
@@ -100,26 +100,26 @@ public class Main {
                     break;
                 case Symbole.SUP:
                     last = current;
-                    if(i+1 < inside.length() && inside.charAt(i+1) == '=') {
+                    if(i+1 < inside.length() && inside.charAt(i+1) == Symbole.AFFECTATION) {
                         current = new Token(Token.TYPE_SUP_EGAL, 0, lineIndex);
                     } else {
                         current = new Token(Token.TYPE_SUP, 0, lineIndex);
                     }
                     break;
-                case Symbole.AND:
+                case Symbole.SINGLE_AND:
                     last = current;
-                    if(i+1 < inside.length() && inside.charAt(i+1) == '&') {
+                    if(i+1 < inside.length() && inside.charAt(i+1) == Symbole.SINGLE_AND) {
                         current = new Token(Token.TYPE_AND, 0, lineIndex);
                     } else {
-                        throw new ErrLexical(ERR_INTRO + " " + lineIndex + ". '&' is not a valid operator");
+                        throw new ErrLexical(ERR_INTRO + " " + lineIndex + ". '" + Symbole.SINGLE_AND + "' is not a valid operator");
                     }
                     break;
-                case Symbole.OR:
+                case Symbole.SINGLE_OR:
                     last = current;
-                    if(i+1 < inside.length() && inside.charAt(i+1) == '|') {
+                    if(i+1 < inside.length() && inside.charAt(i+1) == Symbole.SINGLE_OR) {
                         current = new Token(Token.TYPE_OR, 0, lineIndex);
                     } else {
-                        throw new ErrLexical(ERR_INTRO + " " + " " + lineIndex + ". '|' is not a valid operator");
+                        throw new ErrLexical(ERR_INTRO + " " + lineIndex + ". '" + Symbole.SINGLE_OR +"' is not a valid operator");
                     }
                     break;
                 case 'a': case 'b': case 'c': case 'd': case 'e': case 'f':
@@ -168,19 +168,19 @@ public class Main {
     }
 
     public static void initSymboles() {
-        symboles.put("=",   new int[]{1, 0});
-        symboles.put("==",  new int[]{2, 1});
-        symboles.put("!=",  new int[]{2, 1});
-        symboles.put("<",   new int[]{2, 1});
-        symboles.put(">",   new int[]{2, 1});
-        symboles.put("<=",  new int[]{2, 1});
-        symboles.put(">=",  new int[]{2, 1});
-        symboles.put("+",   new int[]{3, 1});
-        symboles.put("-",   new int[]{3, 1});
-        symboles.put("*",   new int[]{4, 1});
-        symboles.put("/",   new int[]{4, 1});
-        symboles.put("(",   new int[]{5, 1});
-        symboles.put(")",   new int[]{5, 1});
+        symboles.put(String.valueOf(Symbole.AFFECTATION),   new int[]{1, 0});
+        symboles.put(Symbole.COMP,                          new int[]{2, 1});
+        symboles.put(Symbole.DIFF,                          new int[]{2, 1});
+        symboles.put(String.valueOf(Symbole.INF),           new int[]{2, 1});
+        symboles.put(String.valueOf(Symbole.SUP),           new int[]{2, 1});
+        symboles.put(Symbole.INF_EGAL,                      new int[]{2, 1});
+        symboles.put(Symbole.SUP_EGAL,                      new int[]{2, 1});
+        symboles.put(String.valueOf(Symbole.PLUS),          new int[]{3, 1});
+        symboles.put(String.valueOf(Symbole.MINUS),         new int[]{3, 1});
+        symboles.put(String.valueOf(Symbole.MULTIPLY),      new int[]{4, 1});
+        symboles.put(String.valueOf(Symbole.DIVIDE),        new int[]{4, 1});
+        symboles.put(String.valueOf(Symbole.PAR_OPEN),      new int[]{5, 1});
+        symboles.put(String.valueOf(Symbole.PAR_CLOSE),     new int[]{5, 1});
     }
 
     public static void processWord(String word, int lineIndex) throws ErrLexical {
@@ -237,7 +237,6 @@ public class Main {
             return true;
         }
         throw new ErrSyntaxique(ERR_INTRO + " " + current.getLigne() + ". Expected " + type + " but found " + current.type);
-
     }
 
     //Analyse syntaxique
