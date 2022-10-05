@@ -25,17 +25,18 @@ public class Main {
             letter = inside.charAt(i);
             i++;
             switch (letter) {
-                case Symbole.RETURN, Symbole.TAB, Symbole.SPACE -> current = new Token(Token.TYPE_SPACE, 0, lineIndex);
-                case Symbole.PAR_OPEN -> current = new Token(Token.TYPE_PAR_OPEN, 0, lineIndex);
+                case Symbole.RETURN, Symbole.TAB, Symbole.SPACE ->
+                                          current = new Token(Token.TYPE_SPACE, 0, lineIndex);
+                case Symbole.PAR_OPEN ->  current = new Token(Token.TYPE_PAR_OPEN, 0, lineIndex);
                 case Symbole.PAR_CLOSE -> current = new Token(Token.TYPE_PAR_CLOSE, 0, lineIndex);
-                case Symbole.ACC_OPEN -> current = new Token(Token.TYPE_ACC_OPEN, 0, lineIndex);
+                case Symbole.ACC_OPEN ->  current = new Token(Token.TYPE_ACC_OPEN, 0, lineIndex);
                 case Symbole.ACC_CLOSE -> current = new Token(Token.TYPE_ACC_CLOSE, 0, lineIndex);
                 case Symbole.SEMICOLON -> current = new Token(Token.TYPE_SEMICOL, 0, lineIndex);
-                case Symbole.COMA -> current = new Token(Token.TYPE_COMA, 0, lineIndex);
-                case Symbole.PLUS -> current = new Token(Token.TYPE_PLUS, 0, lineIndex);
-                case Symbole.MINUS -> current = new Token(Token.TYPE_MINUS, 0, lineIndex);
-                case Symbole.MULTIPLY -> current = new Token(Token.TYPE_MULTIPLY, 0, lineIndex);
-                case Symbole.DIVIDE -> current = new Token(Token.TYPE_DIVIDE, 0, lineIndex);
+                case Symbole.COMA ->      current = new Token(Token.TYPE_COMA, 0, lineIndex);
+                case Symbole.PLUS ->      current = new Token(Token.TYPE_PLUS, 0, lineIndex);
+                case Symbole.MINUS ->     current = new Token(Token.TYPE_MINUS, 0, lineIndex);
+                case Symbole.MULTIPLY ->  current = new Token(Token.TYPE_MULTIPLY, 0, lineIndex);
+                case Symbole.DIVIDE ->    current = new Token(Token.TYPE_DIVIDE, 0, lineIndex);
                 case Symbole.NOT -> {
                     if (i + 1 < inside.length() && inside.charAt(i + 1) == Symbole.AFFECTATION) {
                         current = new Token(Token.TYPE_DIFF, 0, lineIndex);
@@ -113,34 +114,34 @@ public class Main {
     }
 
     public static void initSymboles() {
-        symboles.put(String.valueOf(Symbole.AFFECTATION),   new int[]{1, 0});
-        symboles.put(Symbole.COMP,                          new int[]{2, 1});
-        symboles.put(Symbole.DIFF,                          new int[]{2, 1});
-        symboles.put(String.valueOf(Symbole.INF),           new int[]{2, 1});
-        symboles.put(String.valueOf(Symbole.SUP),           new int[]{2, 1});
-        symboles.put(Symbole.INF_EGAL,                      new int[]{2, 1});
-        symboles.put(Symbole.SUP_EGAL,                      new int[]{2, 1});
-        symboles.put(String.valueOf(Symbole.PLUS),          new int[]{3, 1});
-        symboles.put(String.valueOf(Symbole.MINUS),         new int[]{3, 1});
-        symboles.put(String.valueOf(Symbole.MULTIPLY),      new int[]{4, 1});
-        symboles.put(String.valueOf(Symbole.DIVIDE),        new int[]{4, 1});
-        symboles.put(String.valueOf(Symbole.PAR_OPEN),      new int[]{5, 1});
-        symboles.put(String.valueOf(Symbole.PAR_CLOSE),     new int[]{5, 1});
+        symboles.put(String.valueOf(Symbole.AFFECTATION), new int[]{1, 0});
+        symboles.put(               Symbole.COMP,         new int[]{2, 1});
+        symboles.put(               Symbole.DIFF,         new int[]{2, 1});
+        symboles.put(String.valueOf(Symbole.INF),         new int[]{2, 1});
+        symboles.put(String.valueOf(Symbole.SUP),         new int[]{2, 1});
+        symboles.put(               Symbole.INF_EGAL,     new int[]{2, 1});
+        symboles.put(               Symbole.SUP_EGAL,     new int[]{2, 1});
+        symboles.put(String.valueOf(Symbole.PLUS),        new int[]{3, 1});
+        symboles.put(String.valueOf(Symbole.MINUS),       new int[]{3, 1});
+        symboles.put(String.valueOf(Symbole.MULTIPLY),    new int[]{4, 1});
+        symboles.put(String.valueOf(Symbole.DIVIDE),      new int[]{4, 1});
+        symboles.put(String.valueOf(Symbole.PAR_OPEN),    new int[]{5, 1});
+        symboles.put(String.valueOf(Symbole.PAR_CLOSE),   new int[]{5, 1});
     }
 
     public static void processWord(String word, int lineIndex) throws ErrLexical {
         //ATTENTION, ne pas utiliser les Token.type pour RECONNAITRE autre chose que des mots
         switch (word) {
-            case Token.TYPE_RETURN -> current = new Token(Token.TYPE_RETURN, 0, lineIndex);
-            case Token.TYPE_INT -> current = new Token(Token.TYPE_INT, 0, lineIndex);
-            case Token.TYPE_IF -> current = new Token(Token.TYPE_IF, 0, lineIndex);
-            case Token.TYPE_ELSE -> current = new Token(Token.TYPE_ELSE, 0, lineIndex);
-            case Token.TYPE_WHILE -> current = new Token(Token.TYPE_WHILE, 0, lineIndex);
-            case Token.TYPE_FOR -> current = new Token(Token.TYPE_FOR, 0, lineIndex);
-            case Token.TYPE_DO -> current = new Token(Token.TYPE_DO, 0, lineIndex);
-            case Token.TYPE_BREAK -> current = new Token(Token.TYPE_BREAK, 0, lineIndex);
+            case Token.TYPE_RETURN ->   current = new Token(Token.TYPE_RETURN, 0, lineIndex);
+            case Token.TYPE_INT ->      current = new Token(Token.TYPE_INT, 0, lineIndex);
+            case Token.TYPE_IF ->       current = new Token(Token.TYPE_IF, 0, lineIndex);
+            case Token.TYPE_ELSE ->     current = new Token(Token.TYPE_ELSE, 0, lineIndex);
+            case Token.TYPE_WHILE ->    current = new Token(Token.TYPE_WHILE, 0, lineIndex);
+            case Token.TYPE_FOR ->      current = new Token(Token.TYPE_FOR, 0, lineIndex);
+            case Token.TYPE_DO ->       current = new Token(Token.TYPE_DO, 0, lineIndex);
+            case Token.TYPE_BREAK ->    current = new Token(Token.TYPE_BREAK, 0, lineIndex);
             case Token.TYPE_CONTINUE -> current = new Token(Token.TYPE_CONTINUE, 0, lineIndex);
-            default -> current = new Token(Token.TYPE_IDENT, 0, lineIndex);
+            default ->                  current = new Token(Token.TYPE_IDENT, 0, lineIndex);
         }
         //throw new ErrLexical("Unknown word", lineIndex);
     }
@@ -183,7 +184,7 @@ public class Main {
     static Node Global() throws ErrSyntaxique, ErrLexical {
         return  Function();
     }
-    
+
     static Node Function() throws ErrSyntaxique, ErrLexical {
         return Instruction();
     }
