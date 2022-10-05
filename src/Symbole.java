@@ -1,7 +1,7 @@
 public class Symbole {
 
     //CHAR SYMBOLS
-    public static final char RETURN =      '\n';
+    public static final char ENTER =      '\n';
     public static final char TAB =         '\t';
     public static final char SPACE =       ' ';
     public static final char PAR_OPEN =    '(';

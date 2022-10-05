@@ -14,76 +14,82 @@ public class Main {
 
     public static void next() throws ErrLexical {
 
-
-        int lineIndex = 0;
         char letter;
         String word = "";
         String constant = "";
 
         last = current;
-        lineIndex++;
 
         if(i < inside.length()) {
             letter = inside.charAt(i);
             i++;
             switch (letter) {
-                case Symbole.RETURN, Symbole.TAB, Symbole.SPACE ->
-                                          current = new Token(Token.TYPE_SPACE, 0, lineIndex);
-                case Symbole.PAR_OPEN ->  current = new Token(Token.TYPE_PAR_OPEN, 0, lineIndex);
+                case Symbole.ENTER -> {
+                                          lineIndex++;
+                                          current = new Token(Token.TYPE_SPACE,     0, lineIndex);
+                }
+                case Symbole.TAB, Symbole.SPACE ->
+                                          current = new Token(Token.TYPE_SPACE,     0, lineIndex);
+                case Symbole.PAR_OPEN ->  current = new Token(Token.TYPE_PAR_OPEN,  0, lineIndex);
                 case Symbole.PAR_CLOSE -> current = new Token(Token.TYPE_PAR_CLOSE, 0, lineIndex);
-                case Symbole.ACC_OPEN ->  current = new Token(Token.TYPE_ACC_OPEN, 0, lineIndex);
+                case Symbole.ACC_OPEN ->  current = new Token(Token.TYPE_ACC_OPEN,  0, lineIndex);
                 case Symbole.ACC_CLOSE -> current = new Token(Token.TYPE_ACC_CLOSE, 0, lineIndex);
-                case Symbole.SEMICOLON -> current = new Token(Token.TYPE_SEMICOL, 0, lineIndex);
-                case Symbole.COMA ->      current = new Token(Token.TYPE_COMA, 0, lineIndex);
-                case Symbole.PLUS ->      current = new Token(Token.TYPE_PLUS, 0, lineIndex);
-                case Symbole.MINUS ->     current = new Token(Token.TYPE_MINUS, 0, lineIndex);
-                case Symbole.MULTIPLY ->  current = new Token(Token.TYPE_MULTIPLY, 0, lineIndex);
-                case Symbole.DIVIDE ->    current = new Token(Token.TYPE_DIVIDE, 0, lineIndex);
+                case Symbole.SEMICOLON -> current = new Token(Token.TYPE_SEMICOL,   0, lineIndex);
+                case Symbole.COMA ->      current = new Token(Token.TYPE_COMA,      0, lineIndex);
+                case Symbole.PLUS ->      current = new Token(Token.TYPE_PLUS,      0, lineIndex);
+                case Symbole.MINUS ->     current = new Token(Token.TYPE_MINUS,     0, lineIndex);
+                case Symbole.MULTIPLY ->  current = new Token(Token.TYPE_MULTIPLY,  0, lineIndex);
+                case Symbole.DIVIDE ->    current = new Token(Token.TYPE_DIVIDE,    0, lineIndex);
                 case Symbole.NOT -> {
-                    if (i + 1 < inside.length() && inside.charAt(i + 1) == Symbole.AFFECTATION) {
+                    if (i < inside.length() && inside.charAt(i) == Symbole.AFFECTATION) {
                         current = new Token(Token.TYPE_DIFF, 0, lineIndex);
                     } else {
                         current = new Token(Token.TYPE_NOT, 0, lineIndex);
                     }
                 }
                 case Symbole.AFFECTATION -> {
-                    if (i + 1 < inside.length() && inside.charAt(i + 1) == Symbole.AFFECTATION) {
+                    if (i < inside.length() && inside.charAt(i) == Symbole.AFFECTATION) {
                         current = new Token(Token.TYPE_COMP, 0, lineIndex);
+                        i++;
                     } else {
                         current = new Token(Token.TYPE_AFFECTATION, 0, lineIndex);
                     }
                 }
                 case Symbole.INF -> {
-                    if (i + 1 < inside.length() && inside.charAt(i + 1) == Symbole.AFFECTATION) {
+                    if (i < inside.length() && inside.charAt(i) == Symbole.AFFECTATION) {
                         current = new Token(Token.TYPE_INF_EGAL, 0, lineIndex);
+                        i++;
                     } else {
                         current = new Token(Token.TYPE_INF, 0, lineIndex);
                     }
                 }
                 case Symbole.SUP -> {
-                    if (i + 1 < inside.length() && inside.charAt(i + 1) == Symbole.AFFECTATION) {
+                    if (i < inside.length() && inside.charAt(i) == Symbole.AFFECTATION) {
                         current = new Token(Token.TYPE_SUP_EGAL, 0, lineIndex);
+                        i++;
                     } else {
                         current = new Token(Token.TYPE_SUP, 0, lineIndex);
                     }
                 }
                 case Symbole.SINGLE_AND -> {
-                    if (i + 1 < inside.length() && inside.charAt(i + 1) == Symbole.SINGLE_AND) {
+                    if (i < inside.length() && inside.charAt(i) == Symbole.SINGLE_AND) {
                         current = new Token(Token.TYPE_AND, 0, lineIndex);
+                        i++;
                     } else {
                         throw new ErrLexical(ERR_INTRO + " " + lineIndex + ". '" + Symbole.SINGLE_AND + "' is not a valid operator");
                     }
                 }
                 case Symbole.SINGLE_OR -> {
-                    if (i + 1 < inside.length() && inside.charAt(i + 1) == Symbole.SINGLE_OR) {
+                    if (i < inside.length() && inside.charAt(i) == Symbole.SINGLE_OR) {
                         current = new Token(Token.TYPE_OR, 0, lineIndex);
+                        i++;
                     } else {
                         throw new ErrLexical(ERR_INTRO + " " + lineIndex + ". '" + Symbole.SINGLE_OR + "' is not a valid operator");
                     }
                 }
                 case 'a', 'b', 'c', 'd', 'e', 'f', 'g', 'h', 'i', 'j', 'k', 'l', 'm', 'n', 'o', 'p', 'q', 'r', 's', 't', 'u', 'v', 'w', 'x', 'y', 'z', 'A', 'B', 'C', 'D', 'E', 'F', 'G', 'H', 'I', 'J', 'K', 'L', 'M', 'N', 'O', 'P', 'Q', 'R', 'S', 'T', 'U', 'V', 'W', 'X', 'Y', 'Z' -> {
                     word = word + letter;
-                    while ((i + 1) < inside.length() && (inside.charAt(i) >= 'a' && inside.charAt(i) <= 'z' || inside.charAt(i) >= 'A' && inside.charAt(i) <= 'Z')) {
+                    while ((i) < inside.length() && (inside.charAt(i) >= 'a' && inside.charAt(i) <= 'z' || inside.charAt(i) >= 'A' && inside.charAt(i) <= 'Z')) {
                         word = word + inside.charAt(i);
                         i++;
                     }
@@ -96,7 +102,7 @@ public class Main {
                 }
                 case '1', '2', '3', '4', '5', '6', '7', '8', '9' -> {
                     constant = constant + letter;
-                    while ((i + 1) < inside.length() && (inside.charAt(i) >= '1' && inside.charAt(i) <= '9')) {
+                    while ((i) < inside.length() && (inside.charAt(i) >= '1' && inside.charAt(i) <= '9')) {
                         constant = constant + inside.charAt(i);
                         i++;
                     }
