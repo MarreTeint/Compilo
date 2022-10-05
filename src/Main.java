@@ -5,13 +5,15 @@ public class Main {
 
     public static final String ERR_INTRO = "Error at line";
 
-    public static Token                  current =  new Token(null, 0, 0);
-    public static Token                  last =     new Token(null, 0, 0);
-    public static HashMap<String, int[]> symboles = new HashMap<>(); //Key = operator, [0] = precedence, [1] = associativity
-    public static String                 inside =   "";
-    public static int                    i =        0;
+    public static Token                  current =       new Token(null, 0, 0);
+    public static Token                  last =          new Token(null, 0, 0);
+    public static HashMap<String, int[]> symboles =      new HashMap<>(); //Key = operator, [0] = precedence, [1] = associativity
+    public static String                 inside =        "";
+    public static int                    i =             0;
+    public static int                    lineIndex =     1;
 
     public static void next() throws ErrLexical {
+
 
         int lineIndex = 0;
         char letter;
@@ -142,6 +144,7 @@ public class Main {
             case Token.TYPE_BREAK ->    current = new Token(Token.TYPE_BREAK, 0, lineIndex);
             case Token.TYPE_CONTINUE -> current = new Token(Token.TYPE_CONTINUE, 0, lineIndex);
             default ->                  current = new Token(Token.TYPE_IDENT, 0, lineIndex);
+            //todo add identifier to the token
         }
         //throw new ErrLexical("Unknown word", lineIndex);
     }
@@ -211,20 +214,33 @@ public class Main {
             }
             return n;
         } else if (check(Token.TYPE_INT)) {
-            Node n = new Node (Node.TYPE_DECLARATION,0);
-            boolean passed = false;
-            while(!check(Token.TYPE_SEMICOL)){
-                if(passed){
-                    accept(Token.TYPE_COMA);
-                }
-                else {
-                    passed = true;
-                }
-                n.addSon(Expression());
+            accept(Token.TYPE_IDENT);
+            if(check(Token.TYPE_PAR_OPEN)){
+                Node n = new Node(Node.TYPE_FUNCTION, current.getValeur());
+                n.addSon(new Node(Node.TYPE_IDENT, last.getLigne()));
+                accept(Token.TYPE_PAR_CLOSE);
+                n.addSon(Instruction());
+                return n;
             }
-            return n;
-        }
-        else if(check(Token.TYPE_WHILE)){
+            else if(check(Token.TYPE_AFFECTATION)){
+                Node n = new Node (Node.TYPE_DECLARATION,0);
+                boolean passed = false;
+                while(!check(Token.TYPE_SEMICOL)){
+                    if(passed){
+                        accept(Token.TYPE_COMA);
+                    }
+                    else {
+                        passed = true;
+                    }
+                    n.addSon(Expression());
+                }
+                return n;
+            }
+        } else if (check(Token.TYPE_RETURN)) {
+            Node n = new Node(Node.TYPE_RETURN, 0);
+            n.addSon(Expression());
+            accept(Token.TYPE_SEMICOL);
+        } else if(check(Token.TYPE_WHILE)){
             Node n = new Node(Node.TYPE_LOOP, 0);
             Node m = new Node(Node.TYPE_CONDITION, 0);
             n.addSon(m);
@@ -244,7 +260,7 @@ public class Main {
             accept(Token.TYPE_SEMICOL);
             n.addSon(m);
             p.addSon(Expression());
-            accept(Token.TYPE_SEMICOL);
+            accept(Token.TYPE_COMA);
             Node temp = Expression();
             accept(Token.TYPE_PAR_CLOSE);
             m.addSon(Instruction());
@@ -363,9 +379,17 @@ public class Main {
             next();
             return N;
         } else if (check(Token.TYPE_IDENT)) {
-            return new Node (Node.TYPE_VAR, 0);
+             if(check(Token.TYPE_PAR_OPEN)){
+                Node n = new Node(Node.TYPE_CALL, current.getValeur());
+                //TODO add parameters as children of n
+                accept(Token.TYPE_PAR_CLOSE);
+                return n;
+            }
+            else{
+                return new Node(Node.TYPE_VAR, current.getValeur());
+            }
         } else{
-            throw new ErrSyntaxique(ERR_INTRO + " " + current.getLigne() + ". Not a valid expression atome");
+            throw new ErrSyntaxique(ERR_INTRO + " " + current.getLigne() + ". Not a valid expression");
         }
     }
 
