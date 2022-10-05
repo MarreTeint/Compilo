@@ -28,53 +28,53 @@ public class Main {
             lettre = inside.charAt(i);
             i++;
             switch (lettre) {
-                case '\n':
-                case '\t':
-                case ' ': //Space or end of a word
+                case Symbole.RETURN:
+                case Symbole.TAB:
+                case Symbole.SPACE:
                     last = current;
                     current = new Token(Token.TYPE_SPACE, 0, lineIndex);
                     break;
-                case '(': //Opened bracket
+                case Symbole.PAR_OPEN:
                     last = current;
                     current = new Token(Token.TYPE_PAR_OPEN, 0, lineIndex);
                     break;
-                case ')': //Closed bracket
+                case Symbole.PAR_CLOSE:
                     last = current;
                     current = new Token(Token.TYPE_PAR_CLOSE, 0, lineIndex);
                     break;
-                case '{': //Oppened accolade
+                case Symbole.ACC_OPEN:
                     last = current;
                     current = new Token(Token.TYPE_ACC_OPEN, 0, lineIndex);
                     break;
-                case '}': //Closed accolade
+                case Symbole.ACC_CLOSE:
                     last = current;
                     current = new Token(Token.TYPE_ACC_CLOSE, 0, lineIndex);
                     break;
-                case ';': //Closed accolade
+                case Symbole.SEMICOLON:
                     last = current;
                     current = new Token(Token.TYPE_SEMICOL, 0, lineIndex);
                     break;
-                case ',': //Coma
+                case Symbole.COMA:
                     last = current;
                     current = new Token(Token.TYPE_COMA, 0, lineIndex);
                     break;
-                case '+': //Plus
+                case Symbole.PLUS:
                     last = current;
                     current = new Token(Token.TYPE_PLUS, 0, lineIndex);
                     break;
-                case '-': //Minus
+                case Symbole.MINUS:
                     last = current;
                     current = new Token(Token.TYPE_MINUS, 0, lineIndex);
                     break;
-                case '*': //Multiply
+                case Symbole.MULTIPLY:
                     last = current;
                     current = new Token(Token.TYPE_MULTIPLY, 0, lineIndex);
                     break;
-                case '/': //Divide
+                case Symbole.DIVIDE:
                     last = current;
                     current = new Token(Token.TYPE_DIVIDE, 0, lineIndex);
                     break;
-                case '!'://Not
+                case Symbole.NOT:
                     last = current;
                     if(i+1 < inside.length() && inside.charAt(i+1) == '=') {
                         current = new Token(Token.TYPE_DIFF, 0, lineIndex);
@@ -82,7 +82,7 @@ public class Main {
                         current = new Token(Token.TYPE_NOT, 0, lineIndex);
                     }
                     break;
-                case '='://Affectation
+                case Symbole.AFFECTATION:
                     last = current;
                     if(i+1 < inside.length() && inside.charAt(i+1) == '=') {
                         current = new Token(Token.TYPE_COMP, 0, lineIndex);
@@ -90,7 +90,7 @@ public class Main {
                         current = new Token(Token.TYPE_AFFECTATION, 0, lineIndex);
                     }
                     break;
-                case '<'://Less than
+                case Symbole.INF:
                     last = current;
                     if(i+1 < inside.length() && inside.charAt(i+1) == '=') {
                         current = new Token(Token.TYPE_INF_EGAL, 0, lineIndex);
@@ -98,7 +98,7 @@ public class Main {
                         current = new Token(Token.TYPE_INF, 0, lineIndex);
                     }
                     break;
-                case '>'://Greater than
+                case Symbole.SUP:
                     last = current;
                     if(i+1 < inside.length() && inside.charAt(i+1) == '=') {
                         current = new Token(Token.TYPE_SUP_EGAL, 0, lineIndex);
@@ -106,7 +106,7 @@ public class Main {
                         current = new Token(Token.TYPE_SUP, 0, lineIndex);
                     }
                     break;
-                case '&':
+                case Symbole.AND:
                     last = current;
                     if(i+1 < inside.length() && inside.charAt(i+1) == '&') {
                         current = new Token(Token.TYPE_AND, 0, lineIndex);
@@ -114,7 +114,7 @@ public class Main {
                         throw new ErrLexical(ERR_INTRO + " " + lineIndex + ". '&' is not a valid operator");
                     }
                     break;
-                case '|':
+                case Symbole.OR:
                     last = current;
                     if(i+1 < inside.length() && inside.charAt(i+1) == '|') {
                         current = new Token(Token.TYPE_OR, 0, lineIndex);
