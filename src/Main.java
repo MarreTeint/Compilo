@@ -100,7 +100,7 @@ public class Main {
                     }
                     word = "";
                 }
-                case '1', '2', '3', '4', '5', '6', '7', '8', '9' -> {
+                case '0', '1', '2', '3', '4', '5', '6', '7', '8', '9' -> {
                     constant = constant + letter;
                     while ((i) < inside.length() && (inside.charAt(i) >= '1' && inside.charAt(i) <= '9')) {
                         constant = constant + inside.charAt(i);
@@ -195,6 +195,16 @@ public class Main {
     }
 
     static Node Function() throws ErrSyntaxique, ErrLexical {
+        if(check(Token.TYPE_INT)){
+            if(check(Token.TYPE_IDENT)){
+                if(check(Token.TYPE_PAR_OPEN)){
+                    accept(Token.TYPE_PAR_CLOSE);
+                    Node n = new Node(Node.TYPE_FUNCTION, current.getValeur());
+                    n.addSon(Instruction());
+                    return n;
+                }
+            }
+        }
         return Instruction();
     }
 
@@ -214,21 +224,13 @@ public class Main {
             }
         }
         else if(check(Token.TYPE_ACC_OPEN)){
-            Node n = new Node(Node.TYPE_DECLARATION, 0);
+            Node n = new Node(Node.TYPE_BLOCK, 0);
             while(!check(Token.TYPE_ACC_CLOSE)){
                 n.addSon(Instruction());
             }
             return n;
         } else if (check(Token.TYPE_INT)) {
-            accept(Token.TYPE_IDENT);
-            if(check(Token.TYPE_PAR_OPEN)){
-                Node n = new Node(Node.TYPE_FUNCTION, current.getValeur());
-                n.addSon(new Node(Node.TYPE_IDENT, last.getLigne()));
-                accept(Token.TYPE_PAR_CLOSE);
-                n.addSon(Instruction());
-                return n;
-            }
-            else if(check(Token.TYPE_AFFECTATION)){
+
                 Node n = new Node (Node.TYPE_DECLARATION,0);
                 boolean passed = false;
                 while(!check(Token.TYPE_SEMICOL)){
@@ -241,11 +243,12 @@ public class Main {
                     n.addSon(Expression());
                 }
                 return n;
-            }
+
         } else if (check(Token.TYPE_RETURN)) {
             Node n = new Node(Node.TYPE_RETURN, 0);
             n.addSon(Expression());
             accept(Token.TYPE_SEMICOL);
+            return n;
         } else if(check(Token.TYPE_WHILE)){
             Node n = new Node(Node.TYPE_LOOP, 0);
             Node m = new Node(Node.TYPE_CONDITION, 0);
