@@ -8,75 +8,62 @@ public class Main {
     //Key = operator, [0] = precedence, [1] = associativity
     public static HashMap<String, int[]> symboles = new HashMap<String, int[]>();
     public static String inside = "";
-    public static int i = 0;
+    public static int i = 0, lineIndex = 1;
 
     public static void next() throws ErrLexical {
         last = current;
 
         //Initialisation variables
         String line;
-        int lineIndex = 0;
+
         boolean isAWord = false;
         String word = "";
         boolean isAConst = false;
         String constant = "";
 
 
-        lineIndex++;
         char lettre;
         if(i < inside.length()) {
             lettre = inside.charAt(i);
 
         i++;
         switch (lettre) {
-            case '\n':
+            case '\n':lineIndex++;
             case '\t':
             case ' ': //Space or end of a word
-                last = current;
                 current = new Token(Token.TYPE_SPACE, 0, lineIndex);
                 break;
             case '(': //Opened bracket
-                last = current;
                 current = new Token(Token.TYPE_PAR_OPEN, 0, lineIndex);
                 break;
             case ')': //Closed bracket
-                last = current;
                 current = new Token(Token.TYPE_PAR_CLOSE, 0, lineIndex);
                 break;
             case '{': //Oppened accolade
-                last = current;
                 current = new Token(Token.TYPE_ACC_OPEN, 0, lineIndex);
                 break;
             case '}': //Closed accolade
-                last = current;
                 current = new Token(Token.TYPE_ACC_CLOSE, 0, lineIndex);
                 break;
             case ';': //Closed accolade
-                last = current;
-                current = new Token(Token.TYPE_POINT_VIRGULE, 0, lineIndex);
+                current = new Token(Token.TYPE_SEMICOL, 0, lineIndex);
                 break;
             case ',': //Coma
-                last = current;
-                current = new Token(Token.TYPE_VIRGULE, 0, lineIndex);
+                current = new Token(Token.TYPE_COMA, 0, lineIndex);
                 break;
             case '+': //Plus
-                last = current;
                 current = new Token(Token.TYPE_PLUS, 0, lineIndex);
                 break;
             case '-': //Minus
-                last = current;
                 current = new Token(Token.TYPE_MINUS, 0, lineIndex);
                 break;
             case '*': //Multiply
-                last = current;
                 current = new Token(Token.TYPE_MULTIPLY, 0, lineIndex);
                 break;
             case '/': //Divide
-                last = current;
                 current = new Token(Token.TYPE_DIVIDE, 0, lineIndex);
                 break;
             case '!'://Not
-                last = current;
                 if(i+1 < inside.length() && inside.charAt(i+1) == '=') {
                     i++;
                     current = new Token(Token.TYPE_DIFF, 0, lineIndex);
@@ -85,7 +72,6 @@ public class Main {
                 }
                 break;
             case '='://Affectation
-                last = current;
                 if(i < inside.length() && inside.charAt(i) == '=') {
                     i++;
                     current = new Token(Token.TYPE_COMP, 0, lineIndex);
@@ -94,7 +80,6 @@ public class Main {
                 }
                 break;
             case '<'://Less than
-                last = current;
                 if(i < inside.length() && inside.charAt(i) == '=') {
                     i++;
                     current = new Token(Token.TYPE_INF_EGAL, 0, lineIndex);
@@ -103,7 +88,6 @@ public class Main {
                 }
                 break;
             case '>'://Greater than
-                last = current;
                 if(i < inside.length() && inside.charAt(i) == '=') {
                     i++;
                     current = new Token(Token.TYPE_SUP_EGAL, 0, lineIndex);
@@ -112,7 +96,6 @@ public class Main {
                 }
                 break;
             case '&':
-                last = current;
                 if(i < inside.length() && inside.charAt(i) == '&') {i++;
                     i++;
                     current = new Token(Token.TYPE_AND, 0, lineIndex);
@@ -218,8 +201,8 @@ public class Main {
         } else if (word.equals(Token.TYPE_CONTINUE)) {
             last = current;
             current = new Token(Token.TYPE_CONTINUE, 0, lineIndex);
-        }
-        else {
+        } else {
+            //todo add identifier to the token
             last = current;
             current = new Token(Token.TYPE_IDENT, 0, lineIndex);
         }
@@ -291,20 +274,33 @@ public class Main {
             }
             return n;
         } else if (check(Token.TYPE_INT)) {
-            Node n = new Node (Node.TYPE_DECLARATION,0);
-            boolean passed = false;
-            while(!check(Token.TYPE_POINT_VIRGULE)){
-                if(passed){
-                    accept(Token.TYPE_VIRGULE);
-                }
-                else {
-                    passed = true;
-                }
-                n.addSon(Expression());
+            accept(Token.TYPE_IDENT);
+            if(check(Token.TYPE_PAR_OPEN)){
+                Node n = new Node(Node.TYPE_FUNCTION, current.getValeur());
+                n.addSon(new Node(Node.TYPE_IDENT, last.getLigne()));
+                accept(Token.TYPE_PAR_CLOSE);
+                n.addSon(Instruction());
+                return n;
             }
-            return n;
-        }
-        else if(check(Token.TYPE_WHILE)){
+            else if(check(Token.TYPE_AFFECTATION)){
+                Node n = new Node (Node.TYPE_DECLARATION,0);
+                boolean passed = false;
+                while(!check(Token.TYPE_SEMICOL)){
+                    if(passed){
+                        accept(Token.TYPE_COMA);
+                    }
+                    else {
+                        passed = true;
+                    }
+                    n.addSon(Expression());
+                }
+                return n;
+            }
+        } else if (check(Token.TYPE_RETURN)) {
+            Node n = new Node(Node.TYPE_RETURN, 0);
+            n.addSon(Expression());
+            accept(Token.TYPE_SEMICOL);
+        } else if(check(Token.TYPE_WHILE)){
             Node n = new Node(Node.TYPE_LOOP, 0);
             Node m = new Node(Node.TYPE_CONDITION, 0);
             n.addSon(m);
@@ -321,10 +317,10 @@ public class Main {
             Node p = new Node(Node.TYPE_CONDITION, 0);
             accept(Token.TYPE_PAR_OPEN);
             n.addSon(Expression());
-            accept(Token.TYPE_POINT_VIRGULE);
+            accept(Token.TYPE_SEMICOL);
             n.addSon(m);
             p.addSon(Expression());
-            accept(Token.TYPE_POINT_VIRGULE);
+            accept(Token.TYPE_COMA);
             Node temp = Expression();
             accept(Token.TYPE_PAR_CLOSE);
             m.addSon(Instruction());
@@ -342,12 +338,12 @@ public class Main {
             accept(Token.TYPE_PAR_OPEN);
             m.addSon(Expression());
             accept(Token.TYPE_PAR_CLOSE);
-            accept(Token.TYPE_POINT_VIRGULE);
+            accept(Token.TYPE_SEMICOL);
             m.addSon(new Node(Node.TYPE_BREAK, 0));
             return n;
         }
         Node n = Expression();
-        accept(Token.TYPE_POINT_VIRGULE);
+        accept(Token.TYPE_SEMICOL);
         Node N = new Node(Node.TYPE_DROP, 0);
         N.addSon(n);
         return N;
@@ -443,9 +439,17 @@ public class Main {
             next();
             return N;
         } else if (check(Token.TYPE_IDENT)) {
-            return new Node (Node.TYPE_VAR, 0);
+             if(check(Token.TYPE_PAR_OPEN)){
+                Node n = new Node(Node.TYPE_CALL, current.getValeur());
+                //TODO add parameters as children of n
+                accept(Token.TYPE_PAR_CLOSE);
+                return n;
+            }
+            else{
+                return new Node(Node.TYPE_VAR, current.getValeur());
+            }
         } else{
-            throw new ErrSyntaxique(ERR_INTRO + " " + current.getLigne() + ". Not a valid expression atome");
+            throw new ErrSyntaxique(ERR_INTRO + " " + current.getLigne() + ". Not a valid expression");
         }
     }
 
@@ -483,7 +487,7 @@ public class Main {
                 inside+='\n';
             }
         } catch (IOException e) {
-            System.out.println("Errorr : File unfoud");
+            System.out.println("Error : File unfoud");
         }
         try {
             Syntaxe();

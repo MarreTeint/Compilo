@@ -75,4 +75,7 @@ public class Node {
     public static String TYPE_IDENT = Token.TYPE_IDENT;
     public static String TYPE_VAR = "var";
     public static String TYPE_TEST = "test";
+    public static String TYPE_CALL = "call";
+    public static String TYPE_FUNCTION = "function";
+    public static String TYPE_RETURN = Token.TYPE_RETURN;
 }
