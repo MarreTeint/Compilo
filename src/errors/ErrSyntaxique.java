@@ -1,3 +1,5 @@
+package errors;
+
 //class error when syntax not ok when compiling
 public class ErrSyntaxique extends Exception {
     public ErrSyntaxique(String message) {

@@ -1,3 +1,5 @@
+package errors;
+
 public class ErrLexical extends Exception {
     public ErrLexical(String message, int line) {
         super(message + " at line " + line);

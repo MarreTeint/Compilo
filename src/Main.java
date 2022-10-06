@@ -1,3 +1,5 @@
+import errors.*;
+
 import java.io.*;
 import java.util.HashMap;
 
@@ -138,21 +140,21 @@ public class Main {
     }
 
     public static void processWord(String word, int lineIndex) throws ErrLexical {
-        //ATTENTION, ne pas utiliser les Token.type pour RECONNAITRE autre chose que des mots
+        //ATTENTION, NE PAS utiliser les Token.type pour RECONNAITRE AUTRE CHOSE que des mots
         switch (word) {
-            case Token.TYPE_RETURN ->   current = new Token(Token.TYPE_RETURN, 0, lineIndex);
-            case Token.TYPE_INT ->      current = new Token(Token.TYPE_INT, 0, lineIndex);
-            case Token.TYPE_IF ->       current = new Token(Token.TYPE_IF, 0, lineIndex);
-            case Token.TYPE_ELSE ->     current = new Token(Token.TYPE_ELSE, 0, lineIndex);
-            case Token.TYPE_WHILE ->    current = new Token(Token.TYPE_WHILE, 0, lineIndex);
-            case Token.TYPE_FOR ->      current = new Token(Token.TYPE_FOR, 0, lineIndex);
-            case Token.TYPE_DO ->       current = new Token(Token.TYPE_DO, 0, lineIndex);
-            case Token.TYPE_BREAK ->    current = new Token(Token.TYPE_BREAK, 0, lineIndex);
+            case Token.TYPE_RETURN ->   current = new Token(Token.TYPE_RETURN,   0, lineIndex);
+            case Token.TYPE_INT ->      current = new Token(Token.TYPE_INT,      0, lineIndex);
+            case Token.TYPE_IF ->       current = new Token(Token.TYPE_IF,       0, lineIndex);
+            case Token.TYPE_ELSE ->     current = new Token(Token.TYPE_ELSE,     0, lineIndex);
+            case Token.TYPE_WHILE ->    current = new Token(Token.TYPE_WHILE,    0, lineIndex);
+            case Token.TYPE_FOR ->      current = new Token(Token.TYPE_FOR,      0, lineIndex);
+            case Token.TYPE_DO ->       current = new Token(Token.TYPE_DO,       0, lineIndex);
+            case Token.TYPE_BREAK ->    current = new Token(Token.TYPE_BREAK,    0, lineIndex);
             case Token.TYPE_CONTINUE -> current = new Token(Token.TYPE_CONTINUE, 0, lineIndex);
-            default ->                  current = new Token(Token.TYPE_IDENT, 0, lineIndex);
+            default ->                  current = new Token(Token.TYPE_IDENT,    0, lineIndex);
             //todo add identifier to the token
         }
-        //throw new ErrLexical("Unknown word", lineIndex);
+        //throw new errors.ErrLexical("Unknown word", lineIndex);
     }
 
     public static boolean check(String type) throws ErrLexical {
