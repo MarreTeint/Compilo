@@ -111,8 +111,8 @@ public class Main {
                     current = new Token(Token.TYPE_CONSTANT, 0, lineIndex);
                     constant = "";
                 }
-            /*default:
-                current = new Token(Token.TYPE_EOS, 0, lineIndex);*/
+                /*default:
+                    current = new Token(Token.TYPE_EOS, 0, lineIndex);*/
             }
         }
         else{
@@ -437,7 +437,7 @@ public class Main {
                 inside += '\n';
             }
         } catch (IOException e) {
-            System.out.println("Error : File unfound");
+            System.out.println("Error : File not found");
             return;
         }
         try {
