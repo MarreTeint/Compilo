@@ -200,8 +200,18 @@ public class Main {
         if(check(Token.TYPE_INT)){
             if(check(Token.TYPE_IDENT)){
                 if(check(Token.TYPE_PAR_OPEN)){
-                    accept(Token.TYPE_PAR_CLOSE);
                     Node n = new Node(Node.TYPE_FUNCTION, current.getValeur());
+                    boolean passed = false;
+                    while(!check(Token.TYPE_PAR_CLOSE)){
+                        if(passed){
+                            accept(Token.TYPE_COMA);
+                        }
+                        else{
+                            passed = true;
+                        }
+                        accept(Token.TYPE_INT);
+                        n.addSon(Expression());
+                    }
                     n.addSon(Instruction());
                     return n;
                 }
@@ -392,8 +402,12 @@ public class Main {
         } else if (check(Token.TYPE_IDENT)) {
              if(check(Token.TYPE_PAR_OPEN)){
                 Node n = new Node(Node.TYPE_CALL, current.getValeur());
-                //TODO add parameters as children of n
-                accept(Token.TYPE_PAR_CLOSE);
+                while(!check(Token.TYPE_PAR_CLOSE)){
+                    n.addSon(Expression());
+                    if(check(Token.TYPE_COMA)){
+                        next();
+                    }
+                }
                 return n;
             }
             else{
