@@ -201,6 +201,7 @@ public class Main {
             if(check(Token.TYPE_IDENT)){
                 if(check(Token.TYPE_PAR_OPEN)){
                     Node n = new Node(Node.TYPE_FUNCTION, current.getValeur());
+                    Node decla = new Node(Node.TYPE_DECLARATION, current.getValeur());
                     boolean passed = false;
                     while(!check(Token.TYPE_PAR_CLOSE)){
                         if(passed){
@@ -208,9 +209,10 @@ public class Main {
                         }
                         else{
                             passed = true;
+                            n.addSon(decla);
                         }
                         accept(Token.TYPE_INT);
-                        n.addSon(Expression());
+                        decla.addSon(Expression());
                     }
                     n.addSon(Instruction());
                     return n;
