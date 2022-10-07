@@ -65,6 +65,7 @@ public class Token {
     public static final String TYPE_DO =          "do";
     public static final String TYPE_BREAK =       "break";
     public static final String TYPE_CONTINUE =    "continue";
+    public static final String TYPE_ADDRESS =      "&";
     public static final String TYPE_AND =         "&&";
     public static final String TYPE_OR =          "||";
     public static final String TYPE_IDENT =       "ident";

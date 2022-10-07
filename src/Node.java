@@ -77,4 +77,6 @@ public class Node {
     public static String TYPE_CALL =              "call";
     public static String TYPE_FUNCTION =          "function";
     public static String TYPE_RETURN =            Token.TYPE_RETURN;
+    public static String TYPE_INDIRECTION =       "indirection";
+    public static String TYPE_ADDRESS =           Token.TYPE_ADDRESS;
 }

@@ -78,7 +78,7 @@ public class Main {
                         current = new Token(Token.TYPE_AND, 0, lineIndex);
                         i++;
                     } else {
-                        throw new ErrLexical(ERR_INTRO + " " + lineIndex + ". '" + Symbole.SINGLE_AND + "' is not a valid operator");
+                        current = new Token(Token.TYPE_ADDRESS, 0, lineIndex);
                     }
                 }
                 case Symbole.SINGLE_OR -> {
@@ -365,13 +365,13 @@ public class Main {
         }
         else if (check(Token.TYPE_MULTIPLY)){
             Node N = Prefix();
-            Node M = new Node(Node.TYPE_MULTIPLY, 0);
+            Node M = new Node(Node.TYPE_INDIRECTION, 0);
             M.addSon(N);
             return M;
         }
-        else if (check(Token.TYPE_DIVIDE)){
+        else if (check(Token.TYPE_ADDRESS)){
             Node N = Prefix();
-            Node M = new Node(Node.TYPE_DIVIDE, 0);
+            Node M = new Node(Node.TYPE_ADDRESS, 0);
             M.addSon(N);
             return M;
         }
