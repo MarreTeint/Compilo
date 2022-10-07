@@ -4,7 +4,7 @@ import java.io.*;
 import java.util.HashMap;
 
 public class Main {
-
+    //TODO add names of ident to the tree of syntax, the rest seems to be ok
     public static final String ERR_INTRO = "Error at line";
 
     public static Token                  current =       new Token(null, 0, 0);
