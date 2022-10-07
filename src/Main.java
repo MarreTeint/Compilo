@@ -36,6 +36,8 @@ public class Main {
                 case Symbole.PAR_CLOSE -> current = new Token(Token.TYPE_PAR_CLOSE, 0, lineIndex);
                 case Symbole.ACC_OPEN ->  current = new Token(Token.TYPE_ACC_OPEN,  0, lineIndex);
                 case Symbole.ACC_CLOSE -> current = new Token(Token.TYPE_ACC_CLOSE, 0, lineIndex);
+                case Symbole.CROCH_OPEN ->  current = new Token(Token.TYPE_CROCH_OPEN,  0, lineIndex);
+                case Symbole.CROCH_CLOSE -> current = new Token(Token.TYPE_CROCH_CLOSE, 0, lineIndex);
                 case Symbole.SEMICOLON -> current = new Token(Token.TYPE_SEMICOL,   0, lineIndex);
                 case Symbole.COMA ->      current = new Token(Token.TYPE_COMA,      0, lineIndex);
                 case Symbole.PLUS ->      current = new Token(Token.TYPE_PLUS,      0, lineIndex);
@@ -386,7 +388,15 @@ public class Main {
         }
     }
     static Node Suffix() throws ErrSyntaxique, ErrLexical {
-        return Atome();
+        Node n = Atome();
+        if(check(Token.TYPE_CROCH_OPEN)){
+            Node N = new Node(Node.TYPE_INDIRECTION, 0);
+            N.addSon(n);
+            N.addSon(Expression());
+            accept(Token.TYPE_CROCH_CLOSE);
+            return N;
+        }
+        return n;
     }
     static Node Atome() throws ErrSyntaxique, ErrLexical {
         if(check(Token.TYPE_CONSTANT)){

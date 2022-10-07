@@ -51,6 +51,8 @@ public class Token {
     public static final String TYPE_PAR_CLOSE =   "parFerm";
     public static final String TYPE_ACC_OPEN =    "accoladeOuv";
     public static final String TYPE_ACC_CLOSE =   "accoladeFerm";
+    public static final String TYPE_CROCH_OPEN =  "crochetOuv";
+    public static final String TYPE_CROCH_CLOSE = "crochetFerm";
     public static final String TYPE_SEMICOL =     "pointVirgule";
     public static final String TYPE_COMA =        "virgule";
     public static final String TYPE_AFFECTATION = "affectation";
