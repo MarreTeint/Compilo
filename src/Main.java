@@ -389,13 +389,27 @@ public class Main {
     }
     static Node Suffix() throws ErrSyntaxique, ErrLexical {
         Node n = Atome();
+
         if(check(Token.TYPE_CROCH_OPEN)){
             Node N = new Node(Node.TYPE_INDIRECTION, 0);
-            N.addSon(n);
-            N.addSon(Expression());
+            Node Add = new Node(Node.TYPE_PLUS, 0);
+            Add.addSon(n);
+            Add.addSon(Expression());
+            N.addSon(Add);
             accept(Token.TYPE_CROCH_CLOSE);
+
+            while(check(Token.TYPE_CROCH_OPEN)){
+                Node M = new Node(Node.TYPE_INDIRECTION, 0);
+                Add = new Node(Node.TYPE_PLUS, 0);
+                Add.addSon(N);
+                Add.addSon(Expression());
+                M.addSon(Add);
+                accept(Token.TYPE_CROCH_CLOSE);
+                N = M;
+            }
             return N;
         }
+
         return n;
     }
     static Node Atome() throws ErrSyntaxique, ErrLexical {
