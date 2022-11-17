@@ -1,5 +1,5 @@
-
+test
 *.xml
 *.iml
 *.class
-out/production/Compilo/test.c
+out/
