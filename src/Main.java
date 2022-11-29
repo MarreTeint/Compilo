@@ -121,7 +121,7 @@ public class Main {
             current = new Token(Token.TYPE_EOS, 0, lineIndex);
         }
         //Debug
-        System.out.println("Current token : " + current.getType());
+        //System.out.println("Current token : " + current.getType());
 
     }
 
@@ -190,7 +190,8 @@ public class Main {
             N = Global();
             next();
         }
-        Node.printTree(N,0);
+        System.out.println("Analyse lexicale faite (1/4)");
+        //Node.printTree(N,0);
         return N;
     }
 
@@ -450,6 +451,7 @@ public class Main {
         Node N = Syntaxe();
         /*ASemNode(N);
         N.nvar = nvar;*/
+        System.out.println("Analyse Sémantique faite (3/4)");
     }
 
     //Génération de code
@@ -461,10 +463,12 @@ public class Main {
         code += ".start\n";
         code += "prep main\n";
         code += "call 0\n";
+        code += Node.Read(codeTree);
         code += "halt\n";
         FileWriter fileWriter = new FileWriter(fileName);
         fileWriter.write(code);
         fileWriter.close();
+        System.out.println("Génération de code fait (4/4)");
     }
     public static void main(String[] args) {
         String fileName = args[0];
@@ -480,17 +484,18 @@ public class Main {
             System.out.println("Error : File not found");
             return;
         }
+        Node code = new Node();
         try {
-            Syntaxe();
+            code = Syntaxe();
+            System.out.println("Analyse Syntaxique faite (2/4)");
         } catch (ErrSyntaxique ErrSyntaxique) {
             System.out.println("Syntax error : " + ErrSyntaxique.getMessage());
         } catch (ErrLexical e) {
             throw new RuntimeException(e);
         }
         //System.out.println(inside);
-        String fileOut = args[1];
         try {
-            genCode(args[1], new Node(fileOut, 0));
+            genCode(args[1], code);
         } catch (IOException e) {
             throw new RuntimeException(e);
         }
