@@ -191,7 +191,7 @@ public class Main {
             next();
         }
         System.out.println("Analyse lexicale faite (1/4)");
-        //Node.printTree(N,0);
+        Node.printTree(N,0);
         return N;
     }
 

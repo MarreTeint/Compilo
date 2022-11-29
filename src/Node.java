@@ -28,17 +28,13 @@ public class Node {
         System.out.println("Type: " + type + " Value: " + value);
     }
     public String toCode(){
-        String code = "";
-        //TODO: A function that convert any Node in binary
-        switch(this.type){
-            case "constante":
-                code = "push "+this.value;
-                break;
-            case "break": // Not sure about this one
-                code = "break";
-                break;
-                // case if, while, ...
-        }
+        String code = switch (this.type) {
+            case "constante" -> "push " + this.value;
+            case "drop" -> "drop"; // Not sure about this one
+            case "plus" -> "add";
+            default -> "";
+            //TODO: case if, while, ...
+        };
         return code+'\n';
     }
     public static String Read(Node N){
