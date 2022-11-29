@@ -28,18 +28,52 @@ public class Node {
         System.out.println("Type: " + type + " Value: " + value);
     }
     public String toCode(){
-        String code = switch (this.type) {
-            case "constante" -> "push " + this.value;
-            case "drop" -> "drop"; // Not sure about this one
-            case "plus" -> "add";
-            default -> "";
+        String code;
+        switch (this.type) {
+            case TYPE_DECLARATION:
+                code="";
+                //declare here vars in hashmap
+                break;
+            case TYPE_CONSTANT, TYPE_VAR:
+                code="push " + this.value;// if var, value is modified by semantic analysis or mb took it in hashmap
+                break;
+            case TYPE_DROP:
+                code="drop"; // Not sure about this one
+                break;
+            case TYPE_PLUS:
+                code="add";
+                break;
+            case TYPE_DIVIDE:
+                code="divide";
+                break;
+            case TYPE_MULTIPLY:
+                code="multiply";
+                break;
+            case TYPE_MINUS:
+                code="minus";
+                break;
+            default:
+                code="";
+                break;
             //TODO: case if, while, ...
         };
         return code+'\n';
     }
     public static String Read(Node N){
         String code = "";
+        if(N.getType() == TYPE_IF) { // Not sure if this is how we learnd it, need to have a look
+            if (/*child 1 return smting >0*/) {
+                code = code + Read(N.sons[1]);
+            }
+            else if(N.sons.length == 3){
+                code = code + Read(N.sons[2]);
+            }
+            return code;
+        }
         for(int i = 0 ; i<N.sons.length ; i++){
+            if(N.getType() == TYPE_DECLARATION){
+                break;
+            }
             code = code + Read(N.sons[i]);
         }
         code = code + N.toCode();
