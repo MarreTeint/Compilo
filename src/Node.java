@@ -58,7 +58,7 @@ public class Node {
             default:
                 code="";
                 break;
-            //TODO: case if, while, ...
+            //TODO: loops, var, functions & cursor
         };
         return code+'\n';
     }
@@ -69,9 +69,11 @@ public class Node {
             if(N.getType() == TYPE_DECLARATION){
                 break;
             }
+
             code = code + Read(N.childs[i]);
+
             if(N.getType() == TYPE_IF){
-                switch (i){ // TODO: create an id for 'if' and add it to the jumps
+                switch (i){
                     case 0 :
                         code = code + N.toCode();
                         code =  code + "ok"+N.getValue()+":\n";
@@ -86,7 +88,7 @@ public class Node {
                     default:
                         code =  code + "end"+N.getValue()+":\n";
                         break;
-                };
+                }
             }
         }
         if(N.getType() != TYPE_IF) {
