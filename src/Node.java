@@ -2,23 +2,23 @@ public class Node {
     //TODO : add a field for the type of the node ident with adress and variable
     private String type;//name is for variable
     private int value,adresse;
-    private Node[] sons;
+    private Node[] childs;
 
     public Node(String type, int value) {
         this.type = type;
         this.value = value;
-        this.sons = new Node[0];
+        this.childs = new Node[0];
     }
     public Node(String type, int value, Node[] sons) {
         this.type = type;
         this.value = value;
-        this.sons = sons;
+        this.childs = sons;
     }
     public Node(String type, String name, int adresse) {
         this.type = type;
         this.value = value;
         this.adresse = adresse;
-        this.sons = new Node[0];
+        this.childs = new Node[0];
     }
 
     public Node(){
@@ -61,11 +61,11 @@ public class Node {
     }
     public static String Read(Node N){
         String code = "";
-        for(int i = 0 ; i<N.sons.length ; i++){
+        for(int i = 0; i<N.childs.length ; i++){
             if(N.getType() == TYPE_DECLARATION){
                 break;
             }
-            code = code + Read(N.sons[i]);
+            code = code + Read(N.childs[i]);
         }
         code = code + N.toCode();
         return code;
@@ -76,25 +76,25 @@ public class Node {
     public int getValue() {
         return value;
     }
-    public Node[] getSons() {
-        return sons;
+    public Node[] getChilds() {
+        return childs;
     }
 
     public void addSon(Node son) {
-        Node[] newSons = new Node[sons.length + 1];
-        for (int i = 0; i < sons.length; i++) {
-            newSons[i] = sons[i];
+        Node[] newSons = new Node[childs.length + 1];
+        for (int i = 0; i < childs.length; i++) {
+            newSons[i] = childs[i];
         }
-        newSons[sons.length] = son;
-        sons = newSons;
+        newSons[childs.length] = son;
+        childs = newSons;
     }
 
     public static void printTree(Node Parent,int depth){
         System.out.println("Type: " + Parent.getType()+" Depth: " +depth+" Value: "+Parent.getValue());
 
 
-        for (int i = 0; i < Parent.getSons().length; i++) {
-            printTree(Parent.getSons()[i],depth+1);
+        for (int i = 0; i < Parent.getChilds().length; i++) {
+            printTree(Parent.getChilds()[i],depth+1);
         }
     }
 

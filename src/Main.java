@@ -461,8 +461,8 @@ public class Main {
             code += genNode(codeTree);
         }while(current.type != Token.TYPE_EOS);*/
         code += ".start\n";
-        code += "prep main\n";
-        code += "call 0\n";
+        //code += "prep main\n";
+        //code += "call 0\n";
         code += Node.Read(codeTree);
         code += "halt\n";
         FileWriter fileWriter = new FileWriter(fileName);
