@@ -13,6 +13,7 @@ public class Main {
     public static String                 inside =        "";
     public static int                    i =             0;
     public static int                    lineIndex =     1;
+    public static int ifs = 0;
 
     public static void next() throws ErrLexical {
 
@@ -231,14 +232,15 @@ public class Main {
             Node texte = Expression();
             accept(Token.TYPE_PAR_CLOSE);
             Node then = Instruction();
+            Node n = new Node(Node.TYPE_IF, ifs);
+            ifs++;
+            n.addSon(texte);
+            n.addSon(then);
             if(check(Token.TYPE_ELSE)){
                 Node elsee = Instruction();
-                Node n = new Node(Node.TYPE_IF, 0);
-                n.addSon(texte);
-                n.addSon(then);
                 n.addSon(elsee);
-                return n;
             }
+            return n;
         }
         else if(check(Token.TYPE_ACC_OPEN)){
             Node n = new Node(Node.TYPE_BLOCK, 0);
@@ -441,7 +443,7 @@ public class Main {
                 return new Node(Node.TYPE_VAR, current.getValeur());
             }
         } else{
-            throw new ErrSyntaxique(ERR_INTRO + " " + current.getLigne() + ". Not a valid expression");
+            throw new ErrSyntaxique(ERR_INTRO + " " + current.getLigne() + ". Not a valid expression at " + current.toString());
         }
     }
 

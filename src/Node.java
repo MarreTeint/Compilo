@@ -32,7 +32,7 @@ public class Node {
         switch (this.type) {
             case TYPE_DECLARATION:
                 code="";
-                //declare here vars in hashmap
+                //update here vars in hashmap
                 break;
             case TYPE_CONSTANT, TYPE_VAR:
                 code="push " + this.value;// if var, value is modified by semantic analysis or mb took it in hashmap
@@ -52,6 +52,9 @@ public class Node {
             case TYPE_MINUS:
                 code="minus";
                 break;
+            case TYPE_IF:
+                code = "push 0\ncompare nok"+this.value; //TODO: find the real function to compare
+                break;
             default:
                 code="";
                 break;
@@ -59,6 +62,7 @@ public class Node {
         };
         return code+'\n';
     }
+
     public static String Read(Node N){
         String code = "";
         for(int i = 0; i<N.childs.length ; i++){
@@ -66,8 +70,28 @@ public class Node {
                 break;
             }
             code = code + Read(N.childs[i]);
+            if(N.getType() == TYPE_IF){
+                switch (i){ // TODO: create an id for 'if' and add it to the jumps
+                    case 0 :
+                        code = code + N.toCode();
+                        code =  code + "ok"+N.getValue()+":\n";
+                        break;
+                    case 1:
+                        if(N.childs.length==2){
+                            code =  code + "end"+N.getValue()+":\n";
+                        }else{
+                            code =  code + "jump end"+N.getValue()+"\nnok"+N.getValue()+":\n";
+                        }
+                        break;
+                    default:
+                        code =  code + "end"+N.getValue()+":\n";
+                        break;
+                };
+            }
         }
-        code = code + N.toCode();
+        if(N.getType() != TYPE_IF) {
+            code = code + N.toCode();
+        }
         return code;
     }
     public String getType() {
