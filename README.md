@@ -7,6 +7,7 @@ $ java -jar compilo.jar <Nom du fichier>.c <Nom du fichier compilé>
 ```
 ### Fonctionalitées
 ## EN
+A mini C compiler made in Java
 ### How to use
 In your terminal, go where you saved the .jar file and type:
 ```

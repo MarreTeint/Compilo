@@ -110,7 +110,7 @@ public class Main {
                         constant = constant + inside.charAt(i);
                         i++;
                     }
-                    current = new Token(Token.TYPE_CONSTANT, 0, lineIndex);
+                    current = new Token(Token.TYPE_CONSTANT, Integer.parseInt(constant), lineIndex);
                     constant = "";
                 }
                 /*default:
@@ -191,7 +191,7 @@ public class Main {
             next();
         }
         System.out.println("Analyse lexicale faite (1/4)");
-        Node.printTree(N,0);
+        //Node.printTree(N,0);
         return N;
     }
 
@@ -415,7 +415,7 @@ public class Main {
     }
     static Node Atome() throws ErrSyntaxique, ErrLexical {
         if(check(Token.TYPE_CONSTANT)){
-            return new Node(Node.TYPE_CONSTANT, current.getValeur());
+            return new Node(Node.TYPE_CONSTANT, last.getValeur());
         }
         else if(check(Token.TYPE_PAR_OPEN)) {
             //check if next is an expression

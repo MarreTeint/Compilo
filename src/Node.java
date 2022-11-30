@@ -61,15 +61,6 @@ public class Node {
     }
     public static String Read(Node N){
         String code = "";
-        if(N.getType() == TYPE_IF) { // Not sure if this is how we learnd it, need to have a look
-            if (/*child 1 return smting >0*/) {
-                code = code + Read(N.sons[1]);
-            }
-            else if(N.sons.length == 3){
-                code = code + Read(N.sons[2]);
-            }
-            return code;
-        }
         for(int i = 0 ; i<N.sons.length ; i++){
             if(N.getType() == TYPE_DECLARATION){
                 break;
@@ -99,7 +90,7 @@ public class Node {
     }
 
     public static void printTree(Node Parent,int depth){
-        System.out.println("Type: " + Parent.getType()+" Depth " +depth);
+        System.out.println("Type: " + Parent.getType()+" Depth: " +depth+" Value: "+Parent.getValue());
 
 
         for (int i = 0; i < Parent.getSons().length; i++) {
