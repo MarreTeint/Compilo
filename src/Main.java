@@ -100,7 +100,7 @@ public class Main {
                     try {
                         processWord(word, lineIndex);
                     } catch (ErrLexical e) {
-                        System.out.println(e.getMessage());
+                        throw new RuntimeException(e);
                     }
                     word = "";
                 }
@@ -488,9 +488,7 @@ public class Main {
         try {
             code = Syntaxe();
             System.out.println("Analyse Syntaxique faite (2/4)");
-        } catch (ErrSyntaxique ErrSyntaxique) {
-            System.out.println("Syntax error : " + ErrSyntaxique.getMessage());
-        } catch (ErrLexical e) {
+        } catch (ErrSyntaxique | ErrLexical e) {
             throw new RuntimeException(e);
         }
         //System.out.println(inside);
