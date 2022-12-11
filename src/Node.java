@@ -30,30 +30,53 @@ public class Node {
     public String toCode(){
         String code;
         switch (this.type) {
-            case TYPE_DECLARATION:
-                code="";
-                //update here vars in hashmap
-                break;
             case TYPE_CONSTANT, TYPE_VAR:
                 code="push " + this.value;// if var, value is modified by semantic analysis or mb took it in hashmap
                 break;
             case TYPE_DROP:
-                code="drop"; // Not sure about this one
+                code="drop";
                 break;
             case TYPE_PLUS:
                 code="add";
                 break;
             case TYPE_DIVIDE:
-                code="divide";
+                code="div";
                 break;
             case TYPE_MULTIPLY:
-                code="multiply";
+                code="mul";
                 break;
             case TYPE_MINUS:
-                code="minus";
+                code="sub";
+                break;
+            case TYPE_NOT:
+                code="not";
+                break;
+            case TYPE_AND:
+                code="and";
+                break;
+            case TYPE_OR:
+                code="or";
+                break;
+            case TYPE_COMP:
+                code="cmpeq";
+                break;
+            case TYPE_DIFF:
+                code="cmpne";
+                break;
+            case TYPE_INF:
+                code="cmplt";
+                break;
+            case TYPE_SUP:
+                code="cmpgt";
+                break;
+            case TYPE_INF_EGAL:
+                code="cmple";
+                break;
+            case TYPE_SUP_EGAL:
+                code="cmpge";
                 break;
             case TYPE_IF:
-                code = "push 0\ncompare nok"+this.value; //TODO: find the real function to compare
+                code = "jumpt nok"+this.value;
                 break;
             default:
                 code="";
@@ -136,8 +159,15 @@ public class Node {
     public static final String TYPE_MINUS =       Token.TYPE_MINUS;
     public static final String TYPE_MULTIPLY =    Token.TYPE_MULTIPLY;
     public static final String TYPE_DIVIDE =      Token.TYPE_DIVIDE;
+    public static final String TYPE_AND =         Token.TYPE_AND;
+    public static final String TYPE_OR =          Token.TYPE_OR;
     public static final String TYPE_AFFECTATION = Token.TYPE_AFFECTATION;
     public static final String TYPE_COMP =        Token.TYPE_COMP;
+    public static final String TYPE_DIFF =        Token.TYPE_DIFF;
+    public static final String TYPE_INF =         Token.TYPE_INF;
+    public static final String TYPE_SUP =         Token.TYPE_SUP;
+    public static final String TYPE_INF_EGAL =    Token.TYPE_INF_EGAL;
+    public static final String TYPE_SUP_EGAL =    Token.TYPE_SUP_EGAL;
     public static final String TYPE_NOT =         Token.TYPE_NOT;
     public static final String TYPE_CONSTANT =    Token.TYPE_CONSTANT;
     public static final String TYPE_IDENT =       Token.TYPE_IDENT;
