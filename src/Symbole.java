@@ -1,5 +1,38 @@
 public class Symbole {
 
+    private String identifiant;
+    private String type;
+    private int emplacement;
+    private int affecte;
+    private int nombreArguments;
+
+    public Symbole(String identifiant, String type, int emplacement, int affecte) {
+        this.identifiant = identifiant;
+        this.type = type;
+        this.emplacement = emplacement;
+        this.affecte = affecte;
+    }
+
+    public String getIdentifiant() {
+        return identifiant;
+    }
+
+    public String getType() {
+        return type;
+    }
+
+    public int getEmplacement() {
+        return emplacement;
+    }
+
+    public int getAffecte() {
+        return affecte;
+    }
+
+    public int getNombreArguments() {
+        return nombreArguments;
+    }
+
     //CHAR SYMBOLS
     public static final char ENTER =      '\n';
     public static final char TAB =         '\t';

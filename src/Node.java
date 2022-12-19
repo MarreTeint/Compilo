@@ -1,24 +1,20 @@
+import java.util.ArrayList;
+
 public class Node {
     //TODO : add a field for the type of the node ident with adress and variable
     private String type;//name is for variable
-    private int value,adresse;
-    private Node[] sons;
+    private ArrayList<Node> listeFils;
+    private int ligne;
+    private int value;
+    private String chaine;
+    private int emplacement;
+    private int nombreEmplacement;
 
-    public Node(String type, int value) {
+    public Node(String type, int ligne, int value) {
         this.type = type;
+        this.ligne = ligne;
         this.value = value;
-        this.sons = new Node[0];
-    }
-    public Node(String type, int value, Node[] sons) {
-        this.type = type;
-        this.value = value;
-        this.sons = sons;
-    }
-    public Node(String type, String name, int adresse) {
-        this.type = type;
-        this.value = value;
-        this.adresse = adresse;
-        this.sons = new Node[0];
+        this.listeFils = new ArrayList<Node>();
     }
 
     public Node(){
@@ -34,25 +30,19 @@ public class Node {
     public int getValue() {
         return value;
     }
-    public Node[] getSons() {
-        return sons;
+    public ArrayList<Node> getListeFils() {
+        return listeFils;
     }
 
-    public void addSon(Node son) {
-        Node[] newSons = new Node[sons.length + 1];
-        for (int i = 0; i < sons.length; i++) {
-            newSons[i] = sons[i];
-        }
-        newSons[sons.length] = son;
-        sons = newSons;
+    public void addFils(Node fils) {
+        listeFils.add(fils);
     }
 
     public static void printTree(Node Parent,int depth){
         System.out.println("Type: " + Parent.getType()+" Depth " +depth);
 
-
-        for (int i = 0; i < Parent.getSons().length; i++) {
-            printTree(Parent.getSons()[i],depth+1);
+        for (int i = 0; i < Parent.getListeFils().size(); i++) {
+            printTree(Parent.getListeFils().get(i),depth+1);
         }
     }
 
@@ -79,4 +69,12 @@ public class Node {
     public static String TYPE_RETURN =            Token.TYPE_RETURN;
     public static String TYPE_INDIRECTION =       "indirection";
     public static String TYPE_ADDRESS =           Token.TYPE_ADDRESS;
+    public static String TYPE_OR =                Token.TYPE_OR;
+    public static String TYPE_AND =               Token.TYPE_AND;
+    public static String TYPE_INF =               Token.TYPE_INF;
+    public static String TYPE_INF_EGAL =          Token.TYPE_INF_EGAL;
+    public static String TYPE_SUP =               Token.TYPE_SUP;
+    public static String TYPE_SUP_EGAL =          Token.TYPE_SUP_EGAL;
+    public static String TYPE_DIFF =              Token.TYPE_DIFF;
+    public static String TYPE_MODULO =            Token.TYPE_MODULO;
 }

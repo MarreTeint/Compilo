@@ -1,37 +1,26 @@
 public class Token {
 
     String type;
-    int    valeur;
+    String    valeur;
     int    ligne;
     int    adresse;
 
-    public Token(String type, int valeur, int ligne) {
-        this.type =   type;
-        this.valeur = valeur;
-        this.ligne =  ligne;
-    }
-
-    public Token(String type, int valeur, int ligne, int adresse) {
+    public Token(String type, String valeur, int ligne, int adresse) {
         this.type =    type;
         this.valeur =  valeur;
         this.ligne =   ligne;
         this.adresse = adresse;
     }
 
-    public Token(String type, int valeur) {
-        this.type =   type;
-        this.valeur = valeur;
-    }
-
     public String getType() { return type; }
-    public int getValeur() { return valeur; }
+    public String getValeur() { return valeur; }
     public int getLigne() { return ligne; }
     public int getAdresse() { return adresse;}
 
     @Override
     public String toString() {
         return  "Type = "   + getType()                     + "\n" +
-                "Valeur = " + Integer.toString(getValeur()) + "\n" +
+                "Valeur = " + getValeur() + "\n" +
                 "Ligne = "  + Integer.toString(getLigne());
     }
 
@@ -71,5 +60,10 @@ public class Token {
     public static final String TYPE_AND =         "&&";
     public static final String TYPE_OR =          "||";
     public static final String TYPE_IDENT =       "ident";
+    public static final String TYPE_MODULO =      "modulo";
+    public static final String TYPE_POWER =       "puissance";
+    public static final String TYPE_DEBUG =      "debug";
+    public static final String TYPE_SEND =       "send";
+    public static final String TYPE_RECEIVE =    "receive";
 
 }
