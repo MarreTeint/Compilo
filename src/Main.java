@@ -160,7 +160,7 @@ public class Main {
         //throw new errors.ErrLexical("Unknown word", lineIndex);
     }
 
-    public static boolean check(String type) throws ErrLexical {
+        public static boolean check(String type) throws ErrLexical {
         while (current.type.equals(Token.TYPE_SPACE)) {
             next();
         }
@@ -288,7 +288,7 @@ public class Main {
             accept(Token.TYPE_SEMICOL);
             n.addSon(m);
             p.addSon(Expression());
-            accept(Token.TYPE_COMA);
+            accept(Token.TYPE_SEMICOL);
             Node temp = Expression();
             accept(Token.TYPE_PAR_CLOSE);
             m.addSon(Instruction());
@@ -296,8 +296,11 @@ public class Main {
             m.addSon(p);
             return n;
 
-        }
-        else if(check(Token.TYPE_DO)){
+        } else if (check(Token.TYPE_BREAK)) {
+            Node n = new Node(Node.TYPE_BREAK, 0);
+            accept(Token.TYPE_SEMICOL);
+            return n;
+        } else if(check(Token.TYPE_DO)){
             Node n = new Node(Node.TYPE_LOOP, 0);
             n.addSon(Instruction());
             Node m = new Node(Node.TYPE_CONDITION, 0);
@@ -448,12 +451,14 @@ public class Main {
     }
 
     //Analyse sémantique
-    static void ASem() throws ErrSyntaxique, ErrLexical {
+    static Node ASem() throws ErrSyntaxique, ErrLexical {
         int nvar = 0;
         Node N = Syntaxe();
+        System.out.println("Analyse Syntaxique faite (2/4)");
         /*ASemNode(N);
         N.nvar = nvar;*/
         System.out.println("Analyse Sémantique faite (3/4)");
+        return N;
     }
 
     //Génération de code
@@ -488,8 +493,8 @@ public class Main {
         }
         Node code = new Node();
         try {
-            code = Syntaxe();
-            System.out.println("Analyse Syntaxique faite (2/4)");
+            code = ASem();
+
         } catch (ErrSyntaxique | ErrLexical e) {
             throw new RuntimeException(e);
         }

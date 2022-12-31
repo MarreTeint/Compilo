@@ -44,16 +44,19 @@ public class Node {
                 code="add";
                 break;
             case TYPE_DIVIDE:
-                code="divide";
+                code="div";
                 break;
             case TYPE_MULTIPLY:
-                code="multiply";
+                code="mul";
                 break;
             case TYPE_MINUS:
-                code="minus";
+                code="sub";
                 break;
             case TYPE_IF:
-                code = "push 0\ncompare nok"+this.value; //TODO: find the real function to compare
+                code = "push 0\nnot\njumpt nok"+this.value; //TODO: find the real function to compare
+                break;
+            case TYPE_SEQUENCE:
+                code = "jumpt end";
                 break;
             default:
                 code="";
@@ -71,22 +74,25 @@ public class Node {
             }
 
             code = code + Read(N.childs[i]);
+            if(N.getType() == TYPE_SEQUENCE && i == 0){
+                code = code + N.toCode();
+            }
 
             if(N.getType() == TYPE_IF){
                 switch (i){
                     case 0 :
                         code = code + N.toCode();
-                        code =  code + "ok"+N.getValue()+":\n";
+                        code =  code + ".ok"+N.getValue()+"\n";
                         break;
                     case 1:
                         if(N.childs.length==2){
-                            code =  code + "end"+N.getValue()+":\n";
+                            code =  code + ".end"+N.getValue()+"\n";
                         }else{
-                            code =  code + "jump end"+N.getValue()+"\nnok"+N.getValue()+":\n";
+                            code =  code + "jump end"+N.getValue()+"\n.nok"+N.getValue()+":\n";
                         }
                         break;
                     default:
-                        code =  code + "end"+N.getValue()+":\n";
+                        code =  code + ".end"+N.getValue()+"\n";
                         break;
                 }
             }
