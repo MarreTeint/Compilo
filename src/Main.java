@@ -357,7 +357,33 @@ public class Main {
             n.addSon(N);
             n.addSon(Expression());
             return n;
-        } else{
+        }
+        else if (check(Token.TYPE_INF)) {
+            Node n = new Node(Node.TYPE_INF, 0);
+            n.addSon(N);
+            n.addSon(Expression());
+            return n;
+        } else if (check(Token.TYPE_INF_EGAL)) {
+            Node n = new Node(Node.TYPE_INF_EGAL, 0);
+            n.addSon(N);
+            n.addSon(Expression());
+            return n;
+        } else if (check(Token.TYPE_SUP)) {
+            Node n = new Node(Node.TYPE_SUP, 0);
+            n.addSon(N);
+            n.addSon(Expression());
+            return n;
+        } else if (check(Token.TYPE_SUP_EGAL)) {
+            Node n = new Node(Node.TYPE_SUP_EGAL, 0);
+            n.addSon(N);
+            n.addSon(Expression());
+            return n;
+        } else if (check(Token.TYPE_DIFF)) {
+            Node n = new Node(Node.TYPE_DIFF, 0);
+            n.addSon(N);
+            n.addSon(Expression());
+            return n;
+        }else{
             return N;
         }
     }
