@@ -13,7 +13,7 @@ public class Main {
     public static String                 inside =        "";
     public static int                    i =             0;
     public static int                    lineIndex =     1;
-    public static int ifs = 0;
+    public static int blocs = 0;
 
     public static void next() throws ErrLexical {
 
@@ -232,8 +232,8 @@ public class Main {
             Node texte = Expression();
             accept(Token.TYPE_PAR_CLOSE);
             Node then = Instruction();
-            Node n = new Node(Node.TYPE_IF, ifs);
-            ifs++;
+            Node n = new Node(Node.TYPE_IF, blocs);
+            blocs++;
             n.addSon(texte);
             n.addSon(then);
             if(check(Token.TYPE_ELSE)){
@@ -269,45 +269,51 @@ public class Main {
             accept(Token.TYPE_SEMICOL);
             return n;
         } else if(check(Token.TYPE_WHILE)){
-            Node n = new Node(Node.TYPE_LOOP, 0);
-            Node m = new Node(Node.TYPE_CONDITION, 0);
+            Node n = new Node(Node.TYPE_LOOP, blocs);
+            Node m = new Node(Node.TYPE_CONDITION, blocs);
             n.addSon(m);
             accept(Token.TYPE_PAR_OPEN);
             m.addSon(Expression());
             accept(Token.TYPE_PAR_CLOSE);
             m.addSon(Instruction());
-            m.addSon(new Node(Node.TYPE_BREAK, 0));
+            //m.addSon(new Node(Node.TYPE_BREAK, blocs));
+            blocs++;
             return n;
         }
         else if (check(Token.TYPE_FOR)) {
-            Node n = new Node(Node.TYPE_SEQUENCE,0);
-            Node m = new Node(Node.TYPE_LOOP, 0);
-            Node p = new Node(Node.TYPE_CONDITION, 0);
+            Node n = new Node(Node.TYPE_SEQUENCE,blocs);
+            Node m = new Node(Node.TYPE_LOOP, blocs);
+            Node p = new Node(Node.TYPE_CONDITION, blocs);
             accept(Token.TYPE_PAR_OPEN);
             n.addSon(Expression());
             accept(Token.TYPE_SEMICOL);
             n.addSon(m);
-            p.addSon(Expression());
-            accept(Token.TYPE_COMA);
+            Node not = new Node(Node.TYPE_NOT, 0);
+            p.addSon(not);
+            not.addSon(Expression());
+            accept(Token.TYPE_SEMICOL);
             Node temp = Expression();
             accept(Token.TYPE_PAR_CLOSE);
             m.addSon(Instruction());
             m.addSon(temp);
             m.addSon(p);
+            //p.addSon(new Node(Node.TYPE_BREAK, blocs));
+            blocs++;
             return n;
 
         }
         else if(check(Token.TYPE_DO)){
-            Node n = new Node(Node.TYPE_LOOP, 0);
+            Node n = new Node(Node.TYPE_LOOP, blocs);
             n.addSon(Instruction());
-            Node m = new Node(Node.TYPE_CONDITION, 0);
+            Node m = new Node(Node.TYPE_CONDITION, blocs);
             n.addSon(m);
             accept(Token.TYPE_WHILE);
             accept(Token.TYPE_PAR_OPEN);
             m.addSon(Expression());
             accept(Token.TYPE_PAR_CLOSE);
             accept(Token.TYPE_SEMICOL);
-            m.addSon(new Node(Node.TYPE_BREAK, 0));
+            //m.addSon(new Node(Node.TYPE_BREAK, blocs));
+            blocs++;
             return n;
         }
         Node n = Expression();
@@ -448,12 +454,14 @@ public class Main {
     }
 
     //Analyse sémantique
-    static void ASem() throws ErrSyntaxique, ErrLexical {
+    static Node ASem() throws ErrSyntaxique, ErrLexical {
         int nvar = 0;
         Node N = Syntaxe();
+        System.out.println("Analyse syntaxique faite (2/4)");
         /*ASemNode(N);
         N.nvar = nvar;*/
         System.out.println("Analyse Sémantique faite (3/4)");
+        return N;
     }
 
     //Génération de code
@@ -472,7 +480,7 @@ public class Main {
         fileWriter.close();
         System.out.println("Génération de code fait (4/4)");
     }
-    public static void main(String[] args) {
+    public static void main(String[] args) throws ErrSyntaxique, ErrLexical, IOException {
         String fileName = args[0];
         initSymboles();
         try {
@@ -486,18 +494,9 @@ public class Main {
             System.out.println("Error : File not found");
             return;
         }
-        Node code = new Node();
-        try {
-            code = Syntaxe();
-            System.out.println("Analyse Syntaxique faite (2/4)");
-        } catch (ErrSyntaxique | ErrLexical e) {
-            throw new RuntimeException(e);
-        }
+
         //System.out.println(inside);
-        try {
-            genCode(args[1], code);
-        } catch (IOException e) {
-            throw new RuntimeException(e);
-        }
+            genCode(args[1], ASem());
+
     }
 }

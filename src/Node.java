@@ -76,12 +76,19 @@ public class Node {
                 code="cmpge";
                 break;
             case TYPE_IF:
-                code = "jumpt nok"+this.value;
+                if(this.childs.length==2){
+                    code = "jumpt end"+this.value;
+                }else{
+                    code = "jumpt nok"+this.value;
+                }
+                break;
+            case TYPE_BREAK:
+                code = "jump end"+this.value;
                 break;
             default:
                 code="";
                 break;
-            //TODO: loops, var, functions & cursor
+            //TODO: var, functions & pointers
         };
         return code+'\n';
     }
@@ -92,29 +99,40 @@ public class Node {
             if(N.getType() == TYPE_DECLARATION){
                 break;
             }
-
+            if(N.getType() == TYPE_LOOP && i==0){
+                code += ".start"+N.getValue()+"\n";
+            }
             code = code + Read(N.childs[i]);
+            if(N.getType() == TYPE_CONDITION && i==0){
+                code += "jumpt end"+N.getValue()+"\n";
+            }
+            if(N.getType() == TYPE_CONDITION && i==N.childs.length-1){
+                code += "jump start"+N.getValue()+"\n";
+            }
 
             if(N.getType() == TYPE_IF){
                 switch (i){
                     case 0 :
                         code = code + N.toCode();
-                        code =  code + "ok"+N.getValue()+":\n";
+                        code =  code + ".ok"+N.getValue()+":\n";
                         break;
                     case 1:
                         if(N.childs.length==2){
-                            code =  code + "end"+N.getValue()+":\n";
+                            code =  code + ".end"+N.getValue()+"\n";
                         }else{
-                            code =  code + "jump end"+N.getValue()+"\nnok"+N.getValue()+":\n";
+                            code =  code + "jump end"+N.getValue()+"\n.nok"+N.getValue()+"\n";
                         }
                         break;
                     default:
-                        code =  code + "end"+N.getValue()+":\n";
+                        code =  code + ".end"+N.getValue()+"\n";
                         break;
                 }
             }
+            if(N.getType() == TYPE_LOOP && i==N.childs.length-1){
+                code += ".end"+N.getValue()+"\n";
+            }
         }
-        if(N.getType() != TYPE_IF) {
+        if(N.getType() != TYPE_IF){
             code = code + N.toCode();
         }
         return code;
