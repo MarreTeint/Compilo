@@ -315,6 +315,9 @@ public class Main {
             //m.addSon(new Node(Node.TYPE_BREAK, blocs));
             blocs++;
             return n;
+        }else if (check(Token.TYPE_BREAK)) {
+            accept(Token.TYPE_SEMICOL);
+            return new Node(Node.TYPE_BREAK, blocs);
         }
         Node n = Expression();
         accept(Token.TYPE_SEMICOL);

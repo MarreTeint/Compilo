@@ -77,9 +77,9 @@ public class Node {
                 break;
             case TYPE_IF:
                 if(this.childs.length==2){
-                    code = "jumpt end"+this.value;
+                    code = "jumpf end"+this.value;
                 }else{
-                    code = "jumpt nok"+this.value;
+                    code = "jumpf nok"+this.value;
                 }
                 break;
             case TYPE_BREAK:
@@ -104,7 +104,7 @@ public class Node {
             }
             code = code + Read(N.childs[i]);
             if(N.getType() == TYPE_CONDITION && i==0){
-                code += "jumpt end"+N.getValue()+"\n";
+                code += "jumpf end"+N.getValue()+"\n";
             }
             if(N.getType() == TYPE_CONDITION && i==N.childs.length-1){
                 code += "jump start"+N.getValue()+"\n";
