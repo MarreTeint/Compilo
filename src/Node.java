@@ -114,7 +114,7 @@ public class Node {
                 switch (i){
                     case 0 :
                         code = code + N.toCode();
-                        code =  code + ".ok"+N.getValue()+":\n";
+                        code =  code + ".ok"+N.getValue()+"\n";
                         break;
                     case 1:
                         if(N.childs.length==2){

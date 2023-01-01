@@ -187,11 +187,10 @@ public class Main {
             return null;
         }
         Node N = new Node();
-        while (!current.type.equals(Token.TYPE_EOS)) {
+        //while (!current.type.equals(Token.TYPE_EOS)) {
             N = Global();
             next();
-        }
-        System.out.println("Analyse lexicale faite (1/4)");
+        //}
         //Node.printTree(N,0);
         return N;
     }
@@ -461,7 +460,6 @@ public class Main {
             if (!check(Token.TYPE_PAR_CLOSE)) {
                 throw new ErrSyntaxique(ERR_INTRO + " " + current.getLigne() + ". Missing closing parenthesis");
             }
-            next();
             return N;
         } else if (check(Token.TYPE_IDENT)) {
              if(check(Token.TYPE_PAR_OPEN)){
@@ -486,15 +484,11 @@ public class Main {
     static Node ASem() throws ErrSyntaxique, ErrLexical {
         int nvar = 0;
         Node N = Syntaxe();
-        System.out.println("Analyse syntaxique faite (2/4)");
-        /*ASemNode(N);
-        N.nvar = nvar;*/
-        System.out.println("Analyse Sémantique faite (3/4)");
         return N;
     }
 
     //Génération de code
-    static void genCode(String fileName, Node codeTree) throws IOException {
+    static void genCode(String fileName) throws IOException, ErrSyntaxique, ErrLexical {
         String code = "";
         /*do{
             code += genNode(codeTree);
@@ -502,12 +496,14 @@ public class Main {
         code += ".start\n";
         //code += "prep main\n";
         //code += "call 0\n";
-        code += Node.Read(codeTree);
+        while(current.type != Token.TYPE_EOS){
+            code += Node.Read(ASem());
+        }
         code += "halt\n";
         FileWriter fileWriter = new FileWriter(fileName);
         fileWriter.write(code);
         fileWriter.close();
-        System.out.println("Génération de code fait (4/4)");
+        System.out.println("Génération de code fait avec succès");
     }
     public static void main(String[] args) throws ErrSyntaxique, ErrLexical, IOException {
         String fileName = args[0];
@@ -525,7 +521,7 @@ public class Main {
         }
 
         //System.out.println(inside);
-            genCode(args[1], ASem());
+            genCode(args[1]);
 
     }
 }
