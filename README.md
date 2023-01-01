@@ -3,7 +3,7 @@
 ### Comment l'utiliser
 Dans le terminal (sous Windows), aller là où le .jar est enregistré et taper :
 ```
-$ java -jar compilo.jar <Nom du fichier>.c <Nom du fichier compilé>
+$ java -jar compilo.jar <Nom du fichier> <Nom du fichier compilé>
 ```
 
 ## EN
